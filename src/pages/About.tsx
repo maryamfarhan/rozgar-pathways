@@ -28,43 +28,103 @@ const About = () => {
         </div>
 
         {/* Infrastructure layer */}
-        <div className="bg-gradient-warm rounded-2xl p-7 md:p-10 border border-border mb-14">
-          <h2 className="font-display text-3xl font-bold text-primary mb-3">An infrastructure layer.</h2>
-          <p className="text-foreground text-lg leading-relaxed">
-            Any NGO, government, or training provider can configure Rozgar.ai for their country —
-            their languages, their economy, their currency, their data sources — <strong>no rebuilding from scratch</strong>.
-            One platform, infinite local context.
-          </p>
+        <div className="relative bg-gradient-warm rounded-3xl p-8 md:p-12 border border-border mb-16 overflow-hidden shadow-card">
+          <div
+            className="absolute inset-0 opacity-[0.07] pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(hsl(var(--primary)) 1px, transparent 1px)",
+              backgroundSize: "22px 22px",
+              maskImage: "radial-gradient(ellipse 70% 60% at 80% 20%, black, transparent 70%)",
+              WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 80% 20%, black, transparent 70%)",
+            }}
+          />
+          <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-accent/15 blur-3xl" />
+          <div className="relative">
+            <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-3">
+              The platform model
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-primary mb-4 tracking-tight leading-[1.1]">
+              An infrastructure layer.
+            </h2>
+            <p className="text-foreground text-lg leading-relaxed max-w-2xl">
+              Any NGO, government, or training provider can configure Rozgar.ai for their country —
+              their languages, their economy, their currency, their data sources — <strong className="text-primary">no rebuilding from scratch</strong>.
+              One platform, infinite local context.
+            </p>
+          </div>
         </div>
 
         {/* Modules */}
-        <div className="mb-14">
-          <h2 className="font-display text-3xl font-bold text-primary mb-6">Three modules. One stack.</h2>
+        <div className="mb-16">
+          <div className="mb-7">
+            <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-2">
+              Architecture
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-primary tracking-tight">
+              Three modules. One stack.
+            </h2>
+          </div>
           <div className="grid md:grid-cols-3 gap-5">
-            {modules.map((m) => (
-              <div key={m.name} className="bg-card rounded-2xl p-6 border border-border shadow-card">
-                <div className="w-11 h-11 rounded-xl bg-accent-soft flex items-center justify-center mb-4">
-                  <m.icon className="text-accent" size={20} />
+            {modules.map((m, i) => (
+              <article
+                key={m.name}
+                className="group relative bg-card rounded-3xl p-7 border border-border shadow-card hover:shadow-warm transition-smooth hover:-translate-y-1.5 overflow-hidden"
+              >
+                <span
+                  aria-hidden
+                  className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-accent/[0.06] blur-2xl"
+                />
+                <div className="relative flex items-center justify-between mb-5">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-accent/20 blur-md rounded-2xl" />
+                    <div className="relative w-12 h-12 rounded-2xl bg-card border border-border flex items-center justify-center shadow-soft group-hover:scale-110 transition-smooth">
+                      <m.icon className="text-accent" size={22} strokeWidth={2.2} />
+                    </div>
+                  </div>
+                  <span className="font-display text-3xl font-bold text-primary/[0.08] leading-none select-none">
+                    0{i + 1}
+                  </span>
                 </div>
-                <h3 className="font-display text-lg font-bold text-primary mb-2">{m.name}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{m.desc}</p>
-              </div>
+                <h3 className="relative font-display text-lg font-bold text-primary mb-2 tracking-tight">{m.name}</h3>
+                <p className="relative text-muted-foreground text-sm leading-relaxed">{m.desc}</p>
+                <div
+                  className="relative mt-5 h-[3px] w-10 rounded-full bg-accent transition-smooth group-hover:w-20"
+                  aria-hidden
+                />
+              </article>
             ))}
           </div>
         </div>
 
         {/* Hackathon credit */}
-        <div className="bg-gradient-hero rounded-2xl p-8 text-primary-foreground text-center">
-          <p className="text-sm uppercase tracking-wider text-primary-foreground/70 mb-2 font-semibold">
-            Built for
-          </p>
-          <h3 className="font-display text-2xl md:text-3xl font-bold mb-1">MIT Global Hackathon</h3>
-          <p className="text-primary-foreground/80 mb-6">World Bank UNMAPPED Challenge</p>
-          <Button asChild variant="outline" className="bg-card hover:bg-card/90 border-card text-primary">
-            <a href="#" target="_blank" rel="noreferrer">
-              <Github size={16} className="mr-2" /> View on GitHub
-            </a>
-          </Button>
+        <div className="relative bg-gradient-hero rounded-3xl p-10 md:p-12 text-primary-foreground overflow-hidden shadow-warm">
+          <div
+            className="absolute inset-0 opacity-[0.08]"
+            style={{
+              backgroundImage: "radial-gradient(hsl(39 38% 97%) 1px, transparent 1px)",
+              backgroundSize: "20px 20px",
+            }}
+          />
+          <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-accent/25 blur-3xl" />
+          <div className="absolute -bottom-24 -right-16 w-80 h-80 rounded-full bg-accent/15 blur-3xl" />
+
+          <div className="relative text-center max-w-xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/30 text-accent text-[10px] uppercase tracking-[0.2em] font-bold mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              Built for
+            </div>
+            <h3 className="font-display text-3xl md:text-4xl font-bold mb-2 tracking-tight leading-[1.1]">
+              MIT Global Hackathon
+            </h3>
+            <p className="text-primary-foreground/75 mb-7 text-base">
+              World Bank UNMAPPED Challenge
+            </p>
+            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full font-semibold shadow-warm h-12 px-7">
+              <a href="#" target="_blank" rel="noreferrer">
+                <Github size={16} className="mr-2" /> View on GitHub
+              </a>
+            </Button>
+          </div>
         </div>
       </section>
 

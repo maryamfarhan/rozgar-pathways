@@ -547,8 +547,11 @@ const Dashboard = () => {
 
         {/* POLICY RECOMMENDATIONS */}
         <div>
-          <div className="flex items-end justify-between mb-5 flex-wrap gap-2">
+          <div className="flex items-end justify-between mb-6 flex-wrap gap-2">
             <div>
+              <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-2">
+                Recommended actions
+              </div>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-primary tracking-tight">
                 Policy recommendations
               </h2>
@@ -557,54 +560,113 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {country.policies.map((p) => {
+          <div className="grid md:grid-cols-3 gap-5">
+            {country.policies.map((p, i) => {
               const meta = policyMeta[p.level];
+              const accentBar =
+                p.level === "critical"
+                  ? "hsl(var(--destructive))"
+                  : p.level === "opportunity"
+                    ? "hsl(var(--accent))"
+                    : "hsl(var(--primary))";
               return (
-                <div
+                <article
                   key={p.title}
-                  className="bg-card rounded-3xl p-6 border border-border shadow-card hover:shadow-warm transition-smooth hover:-translate-y-1 flex flex-col"
+                  className="group relative bg-card rounded-3xl p-7 border border-border shadow-card hover:shadow-warm transition-smooth hover:-translate-y-1.5 flex flex-col overflow-hidden"
                 >
-                  <div className={cn("inline-flex w-fit items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.16em] mb-4", meta.tone)}>
-                    <meta.icon size={11} /> {meta.label}
+                  {/* Left accent rail */}
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full transition-smooth group-hover:top-2 group-hover:bottom-2"
+                    style={{ background: accentBar }}
+                  />
+                  {/* Soft tint corner */}
+                  <span
+                    aria-hidden
+                    className="absolute -top-16 -right-16 w-40 h-40 rounded-full opacity-[0.08] blur-2xl"
+                    style={{ background: accentBar }}
+                  />
+
+                  <div className="relative flex items-center justify-between mb-5">
+                    <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.16em]", meta.tone)}>
+                      <meta.icon size={11} /> {meta.label}
+                    </div>
+                    <span className="font-display text-3xl font-bold text-primary/[0.08] leading-none select-none">
+                      0{i + 1}
+                    </span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-primary leading-tight mb-2 tracking-tight">
+
+                  <h3 className="relative font-display text-lg font-bold text-primary leading-[1.2] mb-3 tracking-tight">
                     {p.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                  <p className="relative text-sm text-muted-foreground leading-relaxed flex-1">
                     {p.body}
                   </p>
-                </div>
+
+                  <div className="relative mt-5 pt-4 border-t border-border/60 flex items-center gap-2 text-[11px] text-muted-foreground">
+                    <span className="w-1 h-1 rounded-full bg-accent" />
+                    <span className="uppercase tracking-[0.14em] font-bold">{country.name} · 2024 signal</span>
+                  </div>
+                </article>
               );
             })}
           </div>
         </div>
 
         {/* FOOTER SOURCES */}
-        <div className="bg-primary rounded-3xl p-6 md:p-8 text-primary-foreground">
-          <div className="flex items-start gap-3 mb-4">
-            <ShieldCheck size={18} className="text-accent flex-shrink-0 mt-1" />
-            <div>
-              <h3 className="font-display text-lg font-bold mb-1">Data sources</h3>
-              <p className="text-sm text-primary-foreground/70">
-                All figures sourced from public datasets and peer-reviewed research. Visualizations are illustrative — verify before use in published policy briefs.
-              </p>
+        <div className="relative bg-primary rounded-3xl p-7 md:p-10 text-primary-foreground overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage: "radial-gradient(hsl(39 38% 97%) 1px, transparent 1px)",
+              backgroundSize: "22px 22px",
+            }}
+          />
+          <div className="absolute -right-24 -bottom-24 w-72 h-72 rounded-full bg-accent/20 blur-3xl" />
+
+          <div className="relative grid md:grid-cols-[1fr_auto] gap-6 items-start">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center flex-shrink-0">
+                <ShieldCheck size={20} className="text-accent" />
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-2">
+                  Verified · Peer-reviewed
+                </div>
+                <h3 className="font-display text-2xl font-bold mb-2 leading-tight">Data sources</h3>
+                <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-lg">
+                  All figures sourced from public datasets and peer-reviewed research. Visualizations are illustrative — verify before use in published policy briefs.
+                </p>
+              </div>
+            </div>
+            <div className="text-right md:pt-1">
+              <div className="font-display text-5xl font-bold text-accent leading-none">5</div>
+              <div className="text-[10px] uppercase tracking-[0.18em] text-primary-foreground/60 font-bold mt-1">
+                Datasets cited
+              </div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 pl-7">
+
+          <div className="relative mt-7 pt-6 border-t border-primary-foreground/15 grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {[
-              "ILO ILOSTAT",
-              "World Bank WDI",
-              "Frey-Osborne Automation Scores (2017)",
-              "Wittgenstein Centre 2025–2035",
-              "UNESCO Institute for Statistics",
+              { name: "ILO ILOSTAT", scope: "Employment & labor force" },
+              { name: "World Bank WDI", scope: "Informal economy share" },
+              { name: "Frey-Osborne (2017)", scope: "Automation risk scores" },
+              { name: "Wittgenstein Centre", scope: "Education projections 2025–2035" },
+              { name: "UNESCO UIS", scope: "Educational attainment" },
             ].map((s) => (
-              <span
-                key={s}
-                className="px-3 py-1.5 rounded-full bg-primary-foreground/10 border border-primary-foreground/20 text-sm font-medium"
+              <div
+                key={s.name}
+                className="flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-primary-foreground/[0.06] border border-primary-foreground/15 hover:bg-primary-foreground/[0.1] transition-smooth"
               >
-                {s}
-              </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold leading-tight">{s.name}</div>
+                  <div className="text-[11px] text-primary-foreground/55 mt-0.5 leading-tight">
+                    {s.scope}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
