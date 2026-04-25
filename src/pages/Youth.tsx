@@ -322,59 +322,132 @@ const Youth = () => {
 
             <div className="space-y-4">
               {opportunities.map((o, i) => (
-                <div key={o.title} className="bg-card rounded-2xl p-6 border border-border shadow-card hover:shadow-warm transition-smooth">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-display font-bold flex-shrink-0">
-                      {i + 1}
+                <article
+                  key={o.title}
+                  className="group relative bg-card rounded-3xl p-6 md:p-7 border border-border shadow-card hover:shadow-warm transition-smooth hover:-translate-y-1 overflow-hidden"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full bg-accent transition-smooth group-hover:top-2 group-hover:bottom-2"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-accent/[0.07] blur-2xl"
+                  />
+                  <div className="relative flex items-start gap-5">
+                    <div className="relative flex-shrink-0">
+                      <div className="absolute inset-0 bg-accent/30 blur-md rounded-full" />
+                      <div className="relative w-12 h-12 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-display font-bold text-lg shadow-warm">
+                        {i + 1}
+                      </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="inline-block text-xs font-semibold text-accent bg-accent-soft px-2.5 py-1 rounded-full mb-2">
-                        {o.tag}
-                      </span>
-                      <h3 className="font-display text-xl font-bold text-primary mb-3">{o.title}</h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-start gap-2">
-                          <Target size={16} className="text-muted-foreground mt-0.5 flex-shrink-0" />
-                          <span className="text-foreground">{o.access}</span>
+                      <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-accent bg-accent-soft px-2.5 py-1 rounded-full">
+                          <span className="w-1 h-1 rounded-full bg-accent" />
+                          {o.tag}
+                        </span>
+                        <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
+                          Match #{i + 1}
+                        </span>
+                      </div>
+                      <h3 className="font-display text-xl md:text-2xl font-bold text-primary mb-4 tracking-tight leading-tight">
+                        {o.title}
+                      </h3>
+                      <div className="space-y-2.5 text-sm">
+                        <div className="flex items-start gap-2.5">
+                          <Target size={15} className="text-accent mt-0.5 flex-shrink-0" />
+                          <span className="text-foreground/85">{o.access}</span>
                         </div>
-                        <div className="flex items-start gap-2">
-                          <Clock size={16} className="text-muted-foreground mt-0.5 flex-shrink-0" />
-                          <span className="text-foreground">{o.time}</span>
+                        <div className="flex items-start gap-2.5">
+                          <Clock size={15} className="text-accent mt-0.5 flex-shrink-0" />
+                          <span className="text-foreground/85">{o.time}</span>
                         </div>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-border">
-                        <span className="font-display text-lg font-bold text-primary">{o.income}</span>
+                      <div className="mt-5 pt-4 border-t border-border/60 flex items-end justify-between gap-3 flex-wrap">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-0.5">
+                            Expected income
+                          </div>
+                          <span className="font-display text-xl md:text-2xl font-bold text-primary tracking-tight">
+                            {o.income}
+                          </span>
+                        </div>
+                        <span className="text-[10px] uppercase tracking-[0.14em] font-bold text-accent bg-accent-soft px-2.5 py-1 rounded-full">
+                          {country.currency}
+                        </span>
                       </div>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
 
             {/* 12-month pathway */}
-            <div className="bg-gradient-warm rounded-2xl p-6 md:p-8 border border-border">
-              <h3 className="font-display text-xl font-bold text-primary mb-3">A 12-month pathway</h3>
-              <p className="text-foreground leading-relaxed">
-                Start with verified phone repair on Daraz this month — that's reliable income. In months 2–3, complete the
-                solar installation bridge program. By month 6, you'll be doing solar+IoT installations alongside repair.
-                By month 12, your verified Rozgar credential plus hands-on portfolio puts you in range of junior hardware
-                QA roles paying {isPK ? "PKR 80k+" : "NGN 320k+"} — a 3× increase from where you start today.
-              </p>
+            <div className="relative bg-gradient-warm rounded-3xl p-7 md:p-9 border border-border overflow-hidden shadow-card">
+              <div
+                className="absolute inset-0 opacity-[0.07] pointer-events-none"
+                style={{
+                  backgroundImage: "radial-gradient(hsl(var(--primary)) 1px, transparent 1px)",
+                  backgroundSize: "20px 20px",
+                  maskImage: "radial-gradient(ellipse 60% 50% at 90% 20%, black, transparent 70%)",
+                  WebkitMaskImage: "radial-gradient(ellipse 60% 50% at 90% 20%, black, transparent 70%)",
+                }}
+              />
+              <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-accent/15 blur-3xl" />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent text-accent-foreground flex items-center justify-center shadow-warm">
+                    <Clock size={18} />
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-accent font-bold">
+                      Your roadmap
+                    </div>
+                    <h3 className="font-display text-xl md:text-2xl font-bold text-primary tracking-tight">
+                      A 12-month pathway
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-foreground/85 leading-relaxed">
+                  Start with verified phone repair on Daraz this month — that's reliable income. In months 2–3, complete the
+                  solar installation bridge program. By month 6, you'll be doing solar+IoT installations alongside repair.
+                  By month 12, your verified Rozgar credential plus hands-on portfolio puts you in range of junior hardware
+                  QA roles paying <strong className="text-primary">{isPK ? "PKR 80k+" : "NGN 320k+"}</strong> — a 3× increase from where you start today.
+                </p>
+              </div>
             </div>
 
             {/* Econometric signals */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              {country.signals.map((s) => (
-                <div key={s.text} className="bg-card rounded-2xl p-5 border border-border shadow-card">
-                  <div className="flex items-start gap-3">
-                    <TrendingUp className="text-accent flex-shrink-0 mt-0.5" size={20} />
-                    <div>
-                      <p className="font-medium text-foreground text-sm leading-snug">{s.text}</p>
-                      <p className="text-xs text-muted-foreground mt-2">Source: {s.source}</p>
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-3">
+                Why this matters · macro signals
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {country.signals.map((s) => (
+                  <div
+                    key={s.text}
+                    className="group relative bg-card rounded-2xl p-5 border border-border shadow-card hover:shadow-warm transition-smooth hover:-translate-y-0.5 overflow-hidden"
+                  >
+                    <span
+                      aria-hidden
+                      className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-accent/[0.06] blur-2xl"
+                    />
+                    <div className="relative flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-accent-soft border border-accent/20 flex items-center justify-center flex-shrink-0">
+                        <TrendingUp className="text-accent" size={16} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-foreground text-sm leading-snug">{s.text}</p>
+                        <div className="mt-3 pt-3 border-t border-border/60 flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] font-bold text-muted-foreground">
+                          <span className="w-1 h-1 rounded-full bg-accent" />
+                          Source · {s.source}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             <div className="flex justify-between pt-2">
