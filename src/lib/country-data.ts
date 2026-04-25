@@ -1,18 +1,90 @@
 export type CountryCode = "PK" | "NG";
 
+export type GapLevel = "high" | "med" | "low";
+export type RiskLevel = "low" | "med" | "high";
+
+export interface SkillsGapRow {
+  sector: string;
+  demand: number; // 0-100
+  supply: number; // 0-100
+  gap: GapLevel;
+  trend: "up" | "down" | "flat";
+}
+
+export interface OccupationRisk {
+  name: string;
+  risk: RiskLevel;
+  // 0-100 share of youth currently employed in this occupation in this country
+  share: number;
+}
+
+export interface EducationPoint {
+  year: number;
+  secondary: number; // % of youth with secondary completed
+  tertiary: number; // % of youth with tertiary completed
+}
+
+export interface SectorBubble {
+  sector: string;
+  // 0-100 automation risk
+  automationRisk: number;
+  // % YoY employment growth
+  growth: number;
+  // youth employed (thousands) — drives bubble size
+  youthEmployed: number;
+}
+
+export interface PolicyRecommendation {
+  level: "critical" | "opportunity" | "priority";
+  title: string;
+  body: string;
+}
+
 export interface CountryData {
   code: CountryCode;
   name: string;
   flag: string;
   currency: string;
+
+  // Headline stats
   unemploymentRate: string;
   informalShare: string;
+  secondaryNow: string;
+  secondary2035: string;
+
   signals: { text: string; source: string }[];
-  sectorDemand: { sector: string; demand: string; supply: string; gap: "high" | "med" | "low" }[];
+
+  // Legacy (kept for landing/about/youth pages that still reference these)
+  sectorDemand: { sector: string; demand: string; supply: string; gap: GapLevel }[];
   hotspots: { city: string; x: number; y: number; intensity: number }[];
   interventions: string[];
   econPrimary: string;
+
+  // Rich dashboard data
+  skillsGap: SkillsGapRow[];
+  occupations: OccupationRisk[];
+  educationProjection: EducationPoint[];
+  sectorBubbles: SectorBubble[];
+  policies: PolicyRecommendation[];
 }
+
+const PK_EDUCATION: EducationPoint[] = [
+  { year: 2025, secondary: 52, tertiary: 12 },
+  { year: 2027, secondary: 55, tertiary: 14 },
+  { year: 2029, secondary: 58, tertiary: 16 },
+  { year: 2031, secondary: 60, tertiary: 18 },
+  { year: 2033, secondary: 62, tertiary: 20 },
+  { year: 2035, secondary: 64, tertiary: 22 },
+];
+
+const NG_EDUCATION: EducationPoint[] = [
+  { year: 2025, secondary: 45, tertiary: 10 },
+  { year: 2027, secondary: 48, tertiary: 11 },
+  { year: 2029, secondary: 51, tertiary: 13 },
+  { year: 2031, secondary: 53, tertiary: 14 },
+  { year: 2033, secondary: 56, tertiary: 16 },
+  { year: 2035, secondary: 58, tertiary: 18 },
+];
 
 export const countries: Record<CountryCode, CountryData> = {
   PK: {
@@ -22,6 +94,8 @@ export const countries: Record<CountryCode, CountryData> = {
     currency: "PKR",
     unemploymentRate: "8.9%",
     informalShare: "72%",
+    secondaryNow: "52%",
+    secondary2035: "64%",
     econPrimary: "Pakistan",
     signals: [
       { text: "IT sector growing 8% annually in Pakistan", source: "ILO" },
@@ -48,18 +122,63 @@ export const countries: Record<CountryCode, CountryData> = {
       "Freelance onboarding partnerships with Payoneer & local fintech",
       "Vocational-to-tech bridge programs (electrician → IoT installer)",
     ],
+    skillsGap: [
+      { sector: "Technology", demand: 92, supply: 38, gap: "high", trend: "up" },
+      { sector: "Healthcare", demand: 84, supply: 46, gap: "high", trend: "up" },
+      { sector: "Construction", demand: 70, supply: 62, gap: "med", trend: "flat" },
+      { sector: "Textile", demand: 58, supply: 78, gap: "low", trend: "down" },
+      { sector: "Agriculture", demand: 64, supply: 70, gap: "low", trend: "flat" },
+    ],
+    occupations: [
+      { name: "Data Entry Clerk", risk: "high", share: 6 },
+      { name: "Phone Repair Technician", risk: "low", share: 9 },
+      { name: "Textile Worker", risk: "high", share: 18 },
+      { name: "Electrician", risk: "low", share: 7 },
+      { name: "Healthcare Worker", risk: "low", share: 5 },
+      { name: "Teacher", risk: "low", share: 8 },
+      { name: "Cashier", risk: "med", share: 6 },
+      { name: "Freelance Developer", risk: "med", share: 4 },
+    ],
+    educationProjection: PK_EDUCATION,
+    sectorBubbles: [
+      { sector: "IT", automationRisk: 28, growth: 8.2, youthEmployed: 320 },
+      { sector: "Textile", automationRisk: 72, growth: -1.4, youthEmployed: 980 },
+      { sector: "Construction", automationRisk: 38, growth: 3.1, youthEmployed: 720 },
+      { sector: "Healthcare", automationRisk: 22, growth: 5.6, youthEmployed: 410 },
+      { sector: "Agriculture", automationRisk: 48, growth: 1.8, youthEmployed: 1200 },
+      { sector: "Retail", automationRisk: 60, growth: 2.4, youthEmployed: 540 },
+    ],
+    policies: [
+      {
+        level: "critical",
+        title: "Reskill textile workers toward technical roles",
+        body: "High automation risk (72%) combined with the largest youth employment share (~18%) creates systemic vulnerability. Bridge to electrician, IoT installation, and quality-control roles.",
+      },
+      {
+        level: "opportunity",
+        title: "IT sector growing 8% annually but talent pipeline underdeveloped",
+        body: "Demand-supply gap is the widest of any sector. Mobile-first bootcamps with industry certification can absorb matric-educated youth in 9–12 months.",
+      },
+      {
+        level: "priority",
+        title: "Expand vocational certification recognition",
+        body: "72% informal economy means most credentials are invisible to employers. Recognition-of-prior-learning frameworks unlock formal income for existing skilled workers.",
+      },
+    ],
   },
   NG: {
     code: "NG",
     name: "Nigeria",
     flag: "🇳🇬",
     currency: "NGN",
-    unemploymentRate: "5.0%",
-    informalShare: "92%",
+    unemploymentRate: "53.3%",
+    informalShare: "80%",
+    secondaryNow: "45%",
+    secondary2035: "58%",
     econPrimary: "Nigeria",
     signals: [
       { text: "Tech sector growing 12% annually in Nigeria", source: "ILO" },
-      { text: "92% of Nigeria's economy is informal", source: "World Bank" },
+      { text: "80% of Nigeria's economy is informal", source: "World Bank" },
     ],
     sectorDemand: [
       { sector: "Digital Services", demand: "Very High", supply: "Low", gap: "high" },
@@ -81,6 +200,49 @@ export const countries: Record<CountryCode, CountryData> = {
       "Recognition credentials for informal market traders & artisans",
       "Last-mile logistics training partnerships with platform operators",
       "Agritech extension programs for northern states",
+    ],
+    skillsGap: [
+      { sector: "Technology", demand: 95, supply: 30, gap: "high", trend: "up" },
+      { sector: "Healthcare", demand: 88, supply: 34, gap: "high", trend: "up" },
+      { sector: "Construction", demand: 76, supply: 54, gap: "med", trend: "up" },
+      { sector: "Textile", demand: 50, supply: 62, gap: "low", trend: "flat" },
+      { sector: "Agriculture", demand: 80, supply: 88, gap: "low", trend: "flat" },
+    ],
+    occupations: [
+      { name: "Data Entry Clerk", risk: "high", share: 5 },
+      { name: "Phone Repair Technician", risk: "low", share: 11 },
+      { name: "Textile Worker", risk: "high", share: 9 },
+      { name: "Electrician", risk: "low", share: 8 },
+      { name: "Healthcare Worker", risk: "low", share: 4 },
+      { name: "Teacher", risk: "low", share: 7 },
+      { name: "Cashier", risk: "med", share: 8 },
+      { name: "Freelance Developer", risk: "med", share: 5 },
+    ],
+    educationProjection: NG_EDUCATION,
+    sectorBubbles: [
+      { sector: "IT", automationRisk: 26, growth: 12.0, youthEmployed: 280 },
+      { sector: "Textile", automationRisk: 70, growth: -0.5, youthEmployed: 540 },
+      { sector: "Construction", automationRisk: 36, growth: 4.4, youthEmployed: 820 },
+      { sector: "Healthcare", automationRisk: 20, growth: 6.8, youthEmployed: 360 },
+      { sector: "Agriculture", automationRisk: 46, growth: 2.6, youthEmployed: 1850 },
+      { sector: "Retail", automationRisk: 58, growth: 3.0, youthEmployed: 690 },
+    ],
+    policies: [
+      {
+        level: "critical",
+        title: "Reskill textile workers toward technical roles",
+        body: "High automation risk paired with shrinking employment makes textile a systemic risk for Nigerian youth. Pivot toward electrical and last-mile logistics roles.",
+      },
+      {
+        level: "opportunity",
+        title: "Tech sector growing 12% annually — fastest of any sector",
+        body: "Demand outpaces supply by more than 3×. Lagos and Abuja fintech apprenticeships can absorb senior-secondary graduates within 12 months.",
+      },
+      {
+        level: "priority",
+        title: "Expand vocational certification recognition",
+        body: "80% informal economy means most credentials are invisible to employers. Recognition-of-prior-learning frameworks unlock formal income for existing skilled workers.",
+      },
     ],
   },
 };
