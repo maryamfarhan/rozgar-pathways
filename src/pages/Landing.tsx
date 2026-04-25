@@ -9,21 +9,45 @@ import { ArrowRight, Compass, Shield, Sparkles } from "lucide-react";
 const Landing = () => {
   const { country } = useCountry();
 
+  // Bilingual labels shift based on country context (Urdu for PK, Hausa for NG)
+  const localLabels =
+    country.code === "PK"
+      ? { a: "ہنر", b: "حفاظت", c: "موقع", script: "urdu" as const }
+      : { a: "Sana'a", b: "Kāriya", c: "Dāmā", script: "latin" as const };
+
   const pillars = [
     {
       icon: Compass,
       title: "Maps your skills",
+      local: localLabels.a,
+      localMeaning: "skill · craft",
       desc: "Including the ones you taught yourself, the work no one paid you for, the languages you switch between.",
+      // Warm sand → terracotta
+      tint: "from-[hsl(28_60%_94%)] to-[hsl(16_70%_88%)]",
+      ring: "hsl(16 70% 55%)",
+      pattern: "weave",
     },
     {
       icon: Shield,
       title: "Shows your automation risk",
+      local: localLabels.b,
+      localMeaning: "protection · care",
       desc: "Honest signals about which of your skills are durable, and which are at risk — so you can plan.",
+      // Soft sky → deep blue tint
+      tint: "from-[hsl(210_50%_96%)] to-[hsl(215_50%_88%)]",
+      ring: "hsl(215 59% 26%)",
+      pattern: "arches",
     },
     {
       icon: Sparkles,
       title: "Matches you to real opportunities",
+      local: localLabels.c,
+      localMeaning: "opportunity · path",
       desc: "Not theoretical jobs. Actual income paths, with timelines, in your city, in your currency.",
+      // Warm marigold → amber
+      tint: "from-[hsl(42_80%_94%)] to-[hsl(32_80%_86%)]",
+      ring: "hsl(32 80% 50%)",
+      pattern: "sun",
     },
   ];
 
