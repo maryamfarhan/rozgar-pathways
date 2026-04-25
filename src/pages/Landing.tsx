@@ -9,21 +9,45 @@ import { ArrowRight, Compass, Shield, Sparkles } from "lucide-react";
 const Landing = () => {
   const { country } = useCountry();
 
+  // Bilingual labels shift based on country context (Urdu for PK, Hausa for NG)
+  const localLabels =
+    country.code === "PK"
+      ? { a: "ہنر", b: "حفاظت", c: "موقع", script: "urdu" as const }
+      : { a: "Sana'a", b: "Kāriya", c: "Dāmā", script: "latin" as const };
+
   const pillars = [
     {
       icon: Compass,
       title: "Maps your skills",
+      local: localLabels.a,
+      localMeaning: "skill · craft",
       desc: "Including the ones you taught yourself, the work no one paid you for, the languages you switch between.",
+      // Warm sand → terracotta
+      tint: "from-[hsl(28_60%_94%)] to-[hsl(16_70%_88%)]",
+      ring: "hsl(16 70% 55%)",
+      pattern: "weave",
     },
     {
       icon: Shield,
       title: "Shows your automation risk",
+      local: localLabels.b,
+      localMeaning: "protection · care",
       desc: "Honest signals about which of your skills are durable, and which are at risk — so you can plan.",
+      // Soft sky → deep blue tint
+      tint: "from-[hsl(210_50%_96%)] to-[hsl(215_50%_88%)]",
+      ring: "hsl(215 59% 26%)",
+      pattern: "arches",
     },
     {
       icon: Sparkles,
       title: "Matches you to real opportunities",
+      local: localLabels.c,
+      localMeaning: "opportunity · path",
       desc: "Not theoretical jobs. Actual income paths, with timelines, in your city, in your currency.",
+      // Warm marigold → amber
+      tint: "from-[hsl(42_80%_94%)] to-[hsl(32_80%_86%)]",
+      ring: "hsl(32 80% 50%)",
+      pattern: "sun",
     },
   ];
 
@@ -156,7 +180,7 @@ const Landing = () => {
       <section className="container max-w-6xl mx-auto px-4 md:px-6 py-20">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-4">
-            What it does
+            What it does · {country.code === "PK" ? "تین کام" : "Abubuwa Uku"}
           </div>
           <h2 className="font-display text-4xl md:text-6xl font-bold text-primary mb-5 tracking-[-0.03em] leading-[1]">
             Three things,<br />done well.
@@ -165,25 +189,121 @@ const Landing = () => {
             Built as infrastructure — so any organization can configure it for their country.
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
+
+        <div className="grid md:grid-cols-3 gap-6">
           {pillars.map((p, i) => (
-            <div
+            <article
               key={p.title}
-              className="group bg-card rounded-2xl p-8 border border-border shadow-card hover:shadow-warm transition-smooth hover:-translate-y-1.5 hover:border-accent/30"
-              style={{ animationDelay: `${i * 100}ms` }}
+              className={`group relative overflow-hidden rounded-[2rem] p-8 md:p-9 border border-border/60 shadow-card hover:shadow-warm transition-smooth hover:-translate-y-2 bg-gradient-to-br ${p.tint}`}
             >
-              <div className="w-14 h-14 rounded-2xl bg-accent-soft flex items-center justify-center mb-6 transition-smooth group-hover:bg-accent group-hover:scale-110">
-                <p.icon className="text-accent group-hover:text-accent-foreground transition-smooth" size={24} />
-              </div>
-              <div className="font-display text-5xl font-bold text-accent/20 mb-2 leading-none">
+              {/* Cultural pattern motif (top-right corner) */}
+              <svg
+                className="absolute -top-6 -right-6 w-40 h-40 opacity-[0.12] text-primary pointer-events-none"
+                viewBox="0 0 120 120"
+                fill="none"
+                aria-hidden
+              >
+                {p.pattern === "weave" && (
+                  // South-Asian inspired interwoven diamonds (truck-art / ajrak)
+                  <g stroke="currentColor" strokeWidth="1.4">
+                    {[0, 1, 2, 3, 4].map((r) =>
+                      [0, 1, 2, 3, 4].map((c) => (
+                        <g key={`${r}-${c}`} transform={`translate(${c * 24} ${r * 24})`}>
+                          <path d="M12 0 L24 12 L12 24 L0 12 Z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </g>
+                      ))
+                    )}
+                  </g>
+                )}
+                {p.pattern === "arches" && (
+                  // Mughal / Hausa arch repetition
+                  <g stroke="currentColor" strokeWidth="1.4" fill="none">
+                    {[0, 1, 2, 3].map((r) =>
+                      [0, 1, 2, 3].map((c) => (
+                        <path
+                          key={`${r}-${c}`}
+                          d={`M${c * 30} ${r * 30 + 28} Q${c * 30 + 15} ${r * 30 - 2} ${c * 30 + 30} ${r * 30 + 28}`}
+                        />
+                      ))
+                    )}
+                  </g>
+                )}
+                {p.pattern === "sun" && (
+                  // Radiating sun-burst (universal warmth — adinkra/marigold)
+                  <g stroke="currentColor" strokeWidth="1.4" fill="none">
+                    <circle cx="60" cy="60" r="14" />
+                    <circle cx="60" cy="60" r="26" strokeDasharray="2 6" />
+                    {Array.from({ length: 16 }).map((_, k) => {
+                      const a = (k * Math.PI * 2) / 16;
+                      const x1 = 60 + Math.cos(a) * 30;
+                      const y1 = 60 + Math.sin(a) * 30;
+                      const x2 = 60 + Math.cos(a) * 50;
+                      const y2 = 60 + Math.sin(a) * 50;
+                      return <line key={k} x1={x1} y1={y1} x2={x2} y2={y2} />;
+                    })}
+                  </g>
+                )}
+              </svg>
+
+              {/* Hand-drawn step number (bottom-left watermark) */}
+              <div className="absolute bottom-4 right-6 font-display text-[5rem] leading-none font-bold text-primary/[0.06] select-none">
                 0{i + 1}
               </div>
-              <h3 className="font-display text-2xl font-bold text-primary mb-3 tracking-tight">{p.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{p.desc}</p>
-            </div>
+
+              {/* Icon — circular medallion with cultural ring */}
+              <div className="relative mb-7">
+                <div
+                  className="absolute inset-0 w-16 h-16 rounded-full opacity-30"
+                  style={{
+                    background: `repeating-conic-gradient(${p.ring} 0deg 12deg, transparent 12deg 24deg)`,
+                  }}
+                  aria-hidden
+                />
+                <div className="relative w-16 h-16 rounded-full bg-card flex items-center justify-center shadow-soft border border-border/50 transition-smooth group-hover:scale-110 group-hover:rotate-[-6deg]">
+                  <p.icon style={{ color: p.ring }} size={26} strokeWidth={2.2} />
+                </div>
+              </div>
+
+              {/* Bilingual title block */}
+              <div className="mb-4">
+                <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
+                  <h3 className="font-display text-2xl md:text-[1.7rem] font-bold text-primary tracking-tight leading-[1.1]">
+                    {p.title}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span
+                    className={`text-primary/80 font-semibold ${
+                      localLabels.script === "urdu" ? "font-urdu text-xl leading-none" : "italic"
+                    }`}
+                  >
+                    {p.local}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-primary/30" />
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                    {p.localMeaning}
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-foreground/75 leading-relaxed relative z-10">{p.desc}</p>
+
+              {/* Bottom hairline accent */}
+              <div
+                className="mt-7 h-[3px] w-12 rounded-full transition-smooth group-hover:w-24"
+                style={{ background: p.ring }}
+              />
+            </article>
           ))}
         </div>
+
+        {/* Inclusivity note */}
+        <p className="text-center text-xs text-muted-foreground mt-10 italic">
+          Labels shown in {country.code === "PK" ? "Urdu (اردو)" : "Hausa"} — Rozgar.ai adapts to local language and context wherever it's deployed.
+        </p>
       </section>
+
 
       <Footer />
     </div>
