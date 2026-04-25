@@ -25,12 +25,12 @@ const Login = () => {
     setLoading(true);
     const result = signIn(email, password);
     setLoading(false);
-    if (result.ok) {
+    if (result.ok === true) {
       toast.success("Welcome back, Program Officer");
       navigate(redirectTo, { replace: true });
-    } else {
-      setError(result.error);
+      return;
     }
+    setError(result.error);
   };
 
   const handleDemo = () => {
