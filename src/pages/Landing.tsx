@@ -132,7 +132,7 @@ const Landing = () => {
                 size="lg"
                 className="h-14 px-8 text-base font-semibold rounded-full border-2 border-primary/15 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-primary/30"
               >
-                <Link to="/dashboard">For Organizations →</Link>
+                <Link to="/login">For Organizations →</Link>
               </Button>
             </div>
 
