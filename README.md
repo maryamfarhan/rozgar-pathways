@@ -141,7 +141,7 @@ python main.py --country PK
 
 ## Built By
 
-Built for the MIT Global Hackathon 2025 — World Bank UNMAPPED Challenge.
+Built for the MIT Global Hackathon 2026 — World Bank UNMAPPED Challenge.
 
 *We built Rozgar.ai because we are the people this is for.*
 
