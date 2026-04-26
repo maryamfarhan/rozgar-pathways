@@ -1,7 +1,9 @@
 # Rozgar.ai — روزگار
 ### Making skills visible. Making opportunity real.
-
 **MIT Global Hackathon — World Bank UNMAPPED Challenge**
+
+🌐 **Live App:** [rozgar-ai.lovable.app](https://rozgar-ai.lovable.app)
+💻 **Repo:** [github.com/maryamfarhan/rozgar-pathways](https://github.com/maryamfarhan/rozgar-pathways)
 
 ---
 
@@ -9,13 +11,23 @@
 
 600 million young people in low- and middle-income countries have real skills the formal economy cannot see.
 
-Meet Zara. She is 20, lives in Karachi, and has been repairing phones since she was 16. She speaks three languages, manages her own inventory, and has been teaching herself Python on a shared mobile connection. By any reasonable measure, she has skills.
+Meet Zara. She is 21, lives in Karachi, and has been doing content creation for local businesses for two years — growing Instagram pages, editing reels on her phone, running WhatsApp marketing campaigns. She taught herself CapCut, Canva, and basic SEO from YouTube. She speaks three languages.
+
+By any reasonable measure, Zara has skills.
 
 But no employer knows she exists. No training program has assessed what she already knows. No labor market system has a record of her.
 
-To the formal economy, Zara is unmapped.
+**To the formal economy, Zara is unmapped. She is not the exception — she is the rule.**
 
-She is not the exception. She is the rule.
+---
+
+## Three Structural Failures
+
+| Failure | What it means |
+|---|---|
+| Broken signals | Education credentials don't translate into labor market signals. Informal skills are invisible. |
+| AI disruption without readiness | Automation is arriving unevenly. Youth have no tools to understand or navigate this. |
+| No matching infrastructure | Even where skills and jobs exist in the same place, the connective tissue is absent. |
 
 ---
 
@@ -23,18 +35,50 @@ She is not the exception. She is the rule.
 
 Rozgar.ai is an open infrastructure layer — not just an app — that closes the distance between a young person's real skills and real economic opportunity.
 
-Any government, NGO, training provider, or employer can plug into it and configure it with local data. No rebuilding from scratch. Think protocol, not product.
+Any government, NGO, training provider, or employer can plug into it and configure it with local data. No rebuilding from scratch. **Think protocol, not product.**
 
-### Three Modules
+---
 
-**01 — Skills Signal Engine**
-Takes a user's raw, informal inputs — work history, self-taught skills, languages — and maps them to a structured, portable skills profile grounded in ESCO/ISCO taxonomies. The profile is human-readable. Zara can understand and own it.
+## Architecture
 
-**02 — AI Readiness & Displacement Risk Lens**
-Assesses which of a user's skills are at automation risk and which are durable — calibrated to their local economy, not Silicon Valley assumptions. Automation risk in Karachi looks different than in Kuala Lumpur. Uses Frey-Osborne as a baseline, adjusted for local infrastructure gaps and labor costs.
+```
+┌─────────────────────────────────────────────────────┐
+│                    USER INPUT                        │
+│         Skills · Experience · Languages              │
+└──────────────────────┬──────────────────────────────┘
+                       │
+          ┌────────────▼────────────┐
+          │   pk.json / ng.json     │  ← All local assumptions
+          │   Country config file   │    live here, not in code
+          └────────────┬────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│           01 — Skills Signal Engine                  │
+│   Maps informal experience → ESCO/ISCO taxonomy      │
+│   Output: portable, human-readable skills profile    │
+└──────────────────────┬──────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│           02 — AI Readiness Lens                     │
+│   Automation risk assessment (Frey-Osborne)          │
+│   Calibrated for local economy, not global average   │
+└──────────────────────┬──────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│           03 — Opportunity Matcher                   │
+│   Real econometric signals: ILO + World Bank         │
+│   Realistic income paths in local currency           │
+│   Dual view: youth user + policymaker dashboard      │
+└──────────────────────┬──────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│              OUTPUT                                  │
+│   Portable skills profile · Automation risk score    │
+│   Matched opportunities · 12-month pathway           │
+└─────────────────────────────────────────────────────┘
+```
 
-**03 — Opportunity Matching & Econometric Dashboard**
-Connects a user's skills profile to realistic, reachable opportunities — not aspirational ones. Surfaces real econometric signals (ILO wage data, sector growth rates, World Bank WDI) visibly to the user. Dual interface: one for the youth user, one for a policymaker or program officer.
+**Adding a new country = adding one JSON file. Zero code changes.**
 
 ---
 
@@ -63,12 +107,10 @@ config/
 
 Each config contains:
 - Labor market data (wages, sector growth, unemployment rates)
-- Education taxonomy and credential mapping
+- Education taxonomy and credential mapping (Matric → ISCED Level 2)
 - Automation calibration adjusted for local infrastructure
-- Opportunity types (formal, gig, government schemes)
+- Opportunity types (formal employment, gig, government schemes)
 - Wittgenstein Centre education projections to 2035
-
-**Adding a new country = adding one JSON file. Zero code changes.**
 
 ---
 
@@ -84,7 +126,7 @@ rozgar/
 │   ├── readiness_lens.py        # Module 02: AI Readiness Lens
 │   └── opportunity_matcher.py   # Module 03: Opportunity Matcher
 ├── utils/
-│   └── config_loader.py         # Country-agnostic config system
+│   └── config_loader.py         # Country-agnostic config loader
 ├── main.py                      # Full pipeline entry point
 └── requirements.txt
 ```
@@ -99,12 +141,27 @@ All econometric signals are real, not synthetic.
 |---|---|
 | ILO ILOSTAT | Wage data, employment by sector, labor force participation |
 | World Bank WDI | Development indicators, education, poverty |
-| Frey & Osborne | Automation probability scores by occupation |
+| Frey & Osborne (2013) | Automation probability scores by occupation |
 | ILO Task Indices | Routine vs non-routine task content by occupation |
-| ESCO Taxonomy | Multilingual skills and occupation taxonomy |
+| ESCO Taxonomy | Multilingual skills and occupation taxonomy (EU/ILO) |
 | O*NET (US DOL) | Occupation task content, adapted for LMIC contexts |
 | Wittgenstein Centre | Education level projections by country to 2035 |
 | World Bank STEP | Skills measurement data from LMIC contexts |
+| UNESCO UIS | Enrollment rates and completion rates by country |
+
+---
+
+## Demo Profile — Zara Ahmed
+
+The app comes pre-loaded with Zara's profile for demo purposes:
+
+- **Name:** Zara Ahmed, 21, Karachi
+- **Education:** Matric (ISCED Level 2)
+- **Work history:** Content creation for local businesses for 2 years. Edits reels, runs Instagram and WhatsApp marketing for a clothing boutique in Tariq Road. Grew their followers from 400 to 4,000.
+- **Self-taught:** CapCut, Canva, basic SEO and hashtag strategy from YouTube
+- **Languages:** Urdu, Sindhi, English
+
+Zara represents the hundreds of millions of young people whose real skills are invisible to the formal economy. She is not the exception — she is the rule.
 
 ---
 
@@ -120,10 +177,10 @@ echo "ANTHROPIC_API_KEY=your-key-here" > .env
 # Run demo for Pakistan
 python main.py --demo --country PK
 
-# Run demo for Nigeria (proves country-agnostic design)
+# Run demo for Nigeria — proves country-agnostic design
 python main.py --demo --country NG
 
-# Interactive mode
+# Interactive mode — enter your own profile
 python main.py --country PK
 ```
 
@@ -133,31 +190,15 @@ python main.py --country PK
 
 **App:** [rozgar-ai.lovable.app](https://rozgar-ai.lovable.app)
 
-**Demo login for Organization Portal:**
+**Organization Portal demo login:**
 - Email: `demo@rozgar.ai`
 - Password: `demo123`
-
----
-
-## Demo Profile — Zara Ahmed
-
-The app comes pre-loaded with Zara's profile for demo purposes:
-
-- **Name:** Zara Ahmed, 21, Karachi
-- **Education:** Matric
-- **Work history:** Content creation for local businesses in Karachi for 2 years. Edits reels, runs Instagram and WhatsApp marketing for a clothing boutique in Tariq Road. Grew their followers from 400 to 4,000.
-- **Self-taught:** CapCut, Canva, basic SEO and hashtag strategy from YouTube
-- **Languages:** Urdu, Sindhi, English
-
-Zara represents the hundreds of millions of young people whose real skills are invisible to the formal economy. She is not the exception — she is the rule.
 
 ---
 
 ## Built By
 
 Built for the MIT Global Hackathon 2025 — World Bank UNMAPPED Challenge.
-
-GitHub: [maryamfarhan/rozgar-pathways](https://github.com/maryamfarhan/rozgar-pathways)
 
 *We built Rozgar.ai because we are the people this is for.*
 
