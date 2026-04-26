@@ -401,4 +401,83 @@ const Landing = () => {
   );
 };
 
+// ─── Animated counter strip ───
+const CounterStrip = () => {
+  const youth = useCountUp(600, 1600);
+  const countries = useCountUp(190, 1600);
+
+  return (
+    <section className="relative bg-primary text-primary-foreground overflow-hidden border-y border-primary/40">
+      <div
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+        }}
+      />
+      <div className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full bg-accent/15 blur-[120px]" />
+
+      <div className="container max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12 relative">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Globe2 size={14} className="text-accent" />
+          <span className="text-[10px] uppercase tracking-[0.24em] font-bold text-accent">
+            One infrastructure layer
+          </span>
+        </div>
+        <div className="grid grid-cols-3 gap-4 md:gap-10 items-end">
+          <CounterCell value={`${youth}M`} label="young people" subtle="globally underserved" />
+          <CounterCell value={`${countries}+`} label="countries" subtle="ready for deployment" accent />
+          <CounterCell value="1" label="infrastructure layer" subtle="open · interoperable" />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CounterCell = ({
+  value,
+  label,
+  subtle,
+  accent,
+}: {
+  value: string;
+  label: string;
+  subtle: string;
+  accent?: boolean;
+}) => (
+  <div className="text-center">
+    <div
+      className={`font-display font-bold tracking-[-0.04em] leading-[0.85] tabular-nums text-[3rem] sm:text-6xl md:text-7xl ${
+        accent ? "text-accent" : "text-primary-foreground"
+      }`}
+    >
+      {value}
+    </div>
+    <div className="mt-3 text-sm md:text-base font-display font-semibold text-primary-foreground/90">
+      {label}
+    </div>
+    <div className="text-[10px] uppercase tracking-[0.18em] font-bold text-primary-foreground/45 mt-1">
+      {subtle}
+    </div>
+  </div>
+);
+
+const useCountUp = (target: number, duration = 1400) => {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    setValue(0);
+    const start = Date.now();
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t >= 1) clearInterval(id);
+    }, 30);
+    return () => clearInterval(id);
+  }, [target, duration]);
+  return value;
+};
+
 export default Landing;
+
