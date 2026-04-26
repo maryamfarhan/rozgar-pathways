@@ -131,7 +131,7 @@ python main.py --country PK
 
 ## Live Demo
 
-**App:** [rozgar.ai on Lovable](https://71ce787f-613a-412e-b38c-4b7888a35b78.lovableproject.com)
+**App:** [rozgar-ai.lovable.app](https://rozgar-ai.lovable.app)
 
 **Demo login for Organization Portal:**
 - Email: `demo@rozgar.ai`
@@ -139,9 +139,25 @@ python main.py --country PK
 
 ---
 
+## Demo Profile — Zara Ahmed
+
+The app comes pre-loaded with Zara's profile for demo purposes:
+
+- **Name:** Zara Ahmed, 21, Karachi
+- **Education:** Matric
+- **Work history:** Content creation for local businesses in Karachi for 2 years. Edits reels, runs Instagram and WhatsApp marketing for a clothing boutique in Tariq Road. Grew their followers from 400 to 4,000.
+- **Self-taught:** CapCut, Canva, basic SEO and hashtag strategy from YouTube
+- **Languages:** Urdu, Sindhi, English
+
+Zara represents the hundreds of millions of young people whose real skills are invisible to the formal economy. She is not the exception — she is the rule.
+
+---
+
 ## Built By
 
-Built for the MIT Global Hackathon 2026 — World Bank UNMAPPED Challenge.
+Built for the MIT Global Hackathon 2025 — World Bank UNMAPPED Challenge.
+
+GitHub: [maryamfarhan/rozgar-pathways](https://github.com/maryamfarhan/rozgar-pathways)
 
 *We built Rozgar.ai because we are the people this is for.*
 
