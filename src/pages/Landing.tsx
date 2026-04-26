@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CountrySwitcher } from "@/components/CountrySwitcher";
 import { Button } from "@/components/ui/button";
 import { useCountry } from "@/contexts/CountryContext";
-import { ArrowRight, Compass, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Compass, Shield, Sparkles, Users, Building2, Globe2 } from "lucide-react";
 
 const Landing = () => {
   const { country } = useCountry();
