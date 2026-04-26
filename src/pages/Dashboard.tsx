@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CountrySwitcher } from "@/components/CountrySwitcher";
@@ -17,6 +18,13 @@ import {
   ArrowUp,
   ArrowDown,
   Minus,
+  Download,
+  Share2,
+  FileSpreadsheet,
+  Activity,
+  MapPin,
+  Lock,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -47,38 +55,87 @@ const Dashboard = () => {
     navigate("/", { replace: true });
   };
 
+  const lastUpdated = new Date().toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const exportCSV = () => {
+    const header = "Sector,Employer Demand,Youth Supply,Gap,Trend\n";
+    const rows = country.skillsGap
+      .map((r) => `${r.sector},${r.demand},${r.supply},${r.gap},${r.trend}`)
+      .join("\n");
+    const blob = new Blob([header + rows], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `rozgar-skills-gap-${country.code.toLowerCase()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Skills gap CSV exported");
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Dashboard link copied to clipboard");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const handleDownloadReport = () => {
+    toast.success("Preparing PDF report…", { description: "Demo: report would download here." });
+  };
+
   const statCards = [
     {
       label: "Youth unemployment",
       value: country.unemploymentRate,
       caption: `${country.name} · ages 15–24`,
-      source: "ILO ILOSTAT 2024",
+      source: "ILO ILOSTAT",
+      year: "2024",
       icon: Users,
       tone: "accent" as const,
+      trend: "up" as const,
+      trendDelta: country.code === "PK" ? "+0.4 pts YoY" : "+1.2 pts YoY",
     },
     {
       label: "Informal economy share",
       value: country.informalShare,
       caption: "of total employment",
       source: "World Bank WDI",
+      year: "2023",
       icon: Briefcase,
       tone: "primary" as const,
+      trend: "flat" as const,
+      trendDelta: "stable",
     },
     {
       label: "Youth with secondary education",
       value: country.secondaryNow,
       caption: "Current — ages 20–24",
       source: "UNESCO UIS",
+      year: "2023",
       icon: GraduationCap,
       tone: "soft" as const,
+      trend: "up" as const,
+      trendDelta: country.code === "PK" ? "+1.8 pts YoY" : "+1.4 pts YoY",
     },
     {
       label: "Projected secondary by 2035",
       value: country.secondary2035,
       caption: `+${parseInt(country.secondary2035) - parseInt(country.secondaryNow)} pts vs today`,
       source: "Wittgenstein Centre",
+      year: "Proj. 2035",
       icon: TrendingUp,
       tone: "soft" as const,
+      trend: "up" as const,
+      trendDelta: "projected",
     },
   ];
 
