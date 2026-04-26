@@ -167,17 +167,29 @@ export const countries: Record<CountryCode, CountryData> = {
         level: "critical",
         title: "Reskill textile workers toward technical roles",
         body: "High automation risk (72%) combined with the largest youth employment share (~18%) creates systemic vulnerability. Bridge to electrician, IoT installation, and quality-control roles.",
+        justification: "72% Frey-Osborne automation risk · 18% of youth employed in textiles (ILO 2024)",
       },
       {
         level: "opportunity",
         title: "IT sector growing 8% annually but talent pipeline underdeveloped",
         body: "Demand-supply gap is the widest of any sector. Mobile-first bootcamps with industry certification can absorb matric-educated youth in 9–12 months.",
+        justification: "Demand index 92 vs supply index 38 — gap of +54 points (Rozgar.ai network · ILO)",
       },
       {
         level: "priority",
         title: "Expand vocational certification recognition",
         body: "72% informal economy means most credentials are invisible to employers. Recognition-of-prior-learning frameworks unlock formal income for existing skilled workers.",
+        justification: "World Bank WDI 2023 — 72% of total employment is informal",
       },
+    ],
+    regionLabel: "Pakistan provinces · youth unemployment intensity",
+    regions: [
+      // Stylized Pakistan: 5 provinces in a 100×100 viewBox.
+      { id: "GB", name: "Gilgit-Baltistan", d: "M62,8 L86,8 L88,26 L70,30 L60,22 Z", intensity: 0.35, unemployment: "5.1%" },
+      { id: "KPK", name: "Khyber Pakhtunkhwa", d: "M40,12 L62,8 L60,22 L58,42 L40,46 L34,28 Z", intensity: 0.72, unemployment: "9.8%" },
+      { id: "PB", name: "Punjab", d: "M58,42 L70,30 L88,26 L92,68 L70,72 L60,62 Z", intensity: 0.85, unemployment: "11.2%" },
+      { id: "BL", name: "Balochistan", d: "M8,30 L40,46 L60,62 L70,72 L62,92 L20,94 L4,72 Z", intensity: 0.95, unemployment: "13.4%" },
+      { id: "SD", name: "Sindh", d: "M62,92 L70,72 L92,68 L88,94 Z", intensity: 0.78, unemployment: "10.1%" },
     ],
   },
   NG: {
