@@ -682,12 +682,19 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* REGION HEATMAP */}
+        <RegionHeatmap
+          regions={country.regions}
+          regionLabel={country.regionLabel}
+          countryName={country.name}
+        />
+
         {/* POLICY RECOMMENDATIONS */}
         <div>
           <div className="flex items-end justify-between mb-6 flex-wrap gap-2">
             <div>
               <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-2">
-                Recommended actions
+                Recommended actions · Official briefs
               </div>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-primary tracking-tight">
                 Policy recommendations
@@ -725,7 +732,12 @@ const Dashboard = () => {
                   />
 
                   <div className="relative flex items-center justify-between mb-5">
-                    <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.16em]", meta.tone)}>
+                    <div
+                      className={cn(
+                        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.16em]",
+                        meta.tone
+                      )}
+                    >
                       <meta.icon size={11} /> {meta.label}
                     </div>
                     <span className="font-display text-3xl font-bold text-primary/[0.08] leading-none select-none">
@@ -736,13 +748,37 @@ const Dashboard = () => {
                   <h3 className="relative font-display text-lg font-bold text-primary leading-[1.2] mb-3 tracking-tight">
                     {p.title}
                   </h3>
-                  <p className="relative text-sm text-muted-foreground leading-relaxed flex-1">
+                  <p className="relative text-sm text-muted-foreground leading-relaxed mb-4">
                     {p.body}
                   </p>
 
-                  <div className="relative mt-5 pt-4 border-t border-border/60 flex items-center gap-2 text-[11px] text-muted-foreground">
-                    <span className="w-1 h-1 rounded-full bg-accent" />
-                    <span className="uppercase tracking-[0.14em] font-bold">{country.name} · 2024 signal</span>
+                  {/* Data justification line */}
+                  <div className="relative mb-5 p-3 rounded-xl bg-secondary/50 border border-border/60">
+                    <div className="text-[9px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-1">
+                      Data justification
+                    </div>
+                    <p className="text-[11px] leading-snug text-foreground/80 font-mono">
+                      {p.justification}
+                    </p>
+                  </div>
+
+                  <div className="relative mt-auto flex items-center justify-between gap-2 pt-4 border-t border-border/60">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] font-bold text-muted-foreground">
+                      <span className="w-1 h-1 rounded-full bg-accent" />
+                      {country.name} · 2024
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 px-2.5 text-[11px] font-semibold text-primary hover:bg-primary/5"
+                      onClick={() =>
+                        toast.info("Full brief coming soon", {
+                          description: "Demo: opens detailed PDF brief.",
+                        })
+                      }
+                    >
+                      View Full Brief <ExternalLink size={11} className="ml-1" />
+                    </Button>
                   </div>
                 </article>
               );
