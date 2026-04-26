@@ -145,6 +145,96 @@ const Landing = () => {
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-background pointer-events-none" />
       </section>
 
+      {/* Animated counter strip */}
+      <CounterStrip />
+
+      {/* Two portals */}
+      <section className="container max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-4">
+            Built for everyone in the loop
+          </div>
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-primary mb-4 tracking-[-0.03em] leading-[1]">
+            Two portals.<br />One infrastructure.
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Same data layer, two surfaces — designed for the people whose decisions actually move the labor market.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Youth portal — terracotta */}
+          <Link
+            to="/youth"
+            className="group relative overflow-hidden rounded-[2rem] p-8 md:p-10 bg-accent text-accent-foreground shadow-warm transition-smooth hover:-translate-y-2"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.1]"
+              style={{
+                backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+              }}
+            />
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 blur-3xl" />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center backdrop-blur-sm">
+                  <Users size={26} />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">
+                  For Youth
+                </span>
+              </div>
+              <h3 className="font-display text-3xl md:text-4xl font-bold leading-[1.05] tracking-[-0.02em] mb-3">
+                Youth Portal
+              </h3>
+              <p className="text-accent-foreground/85 text-base leading-relaxed mb-7 max-w-md">
+                Map the work you've actually done — paid, unpaid, informal — to a verified profile and real income paths in your city.
+              </p>
+              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em]">
+                <span>Get started</span>
+                <ArrowRight size={16} className="transition-smooth group-hover:translate-x-1.5" />
+              </div>
+            </div>
+          </Link>
+
+          {/* Org portal — deep blue */}
+          <Link
+            to="/login"
+            className="group relative overflow-hidden rounded-[2rem] p-8 md:p-10 bg-primary text-primary-foreground shadow-warm transition-smooth hover:-translate-y-2"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.08]"
+              style={{
+                backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+              }}
+            />
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-accent/20 blur-3xl" />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center backdrop-blur-sm text-accent">
+                  <Building2 size={26} />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-accent">
+                  For Organizations
+                </span>
+              </div>
+              <h3 className="font-display text-3xl md:text-4xl font-bold leading-[1.05] tracking-[-0.02em] mb-3">
+                Organization Portal
+              </h3>
+              <p className="text-primary-foreground/75 text-base leading-relaxed mb-7 max-w-md">
+                Live skills-gap intelligence, automation risk, and policy briefs — built for NGOs, training providers, and government program officers.
+              </p>
+              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-accent">
+                <span>Sign in</span>
+                <ArrowRight size={16} className="transition-smooth group-hover:translate-x-1.5" />
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* Big stat */}
       <section className="container max-w-6xl mx-auto px-4 md:px-6 py-24">
         <div className="bg-gradient-hero rounded-[2rem] p-10 md:p-20 text-primary-foreground shadow-warm relative overflow-hidden">
