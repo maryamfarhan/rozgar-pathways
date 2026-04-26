@@ -92,7 +92,18 @@ const Dashboard = () => {
     toast.success("Preparing PDF report…", { description: "Demo: report would download here." });
   };
 
-  const statCards = [
+  type Trend = "up" | "down" | "flat";
+  const statCards: {
+    label: string;
+    value: string;
+    caption: string;
+    source: string;
+    year: string;
+    icon: typeof Users;
+    tone: "accent" | "primary" | "soft";
+    trend: Trend;
+    trendDelta: string;
+  }[] = [
     {
       label: "Youth unemployment",
       value: country.unemploymentRate,
@@ -100,8 +111,8 @@ const Dashboard = () => {
       source: "ILO ILOSTAT",
       year: "2024",
       icon: Users,
-      tone: "accent" as const,
-      trend: "up" as const,
+      tone: "accent",
+      trend: "up",
       trendDelta: country.code === "PK" ? "+0.4 pts YoY" : "+1.2 pts YoY",
     },
     {
@@ -111,8 +122,8 @@ const Dashboard = () => {
       source: "World Bank WDI",
       year: "2023",
       icon: Briefcase,
-      tone: "primary" as const,
-      trend: "flat" as const,
+      tone: "primary",
+      trend: "flat",
       trendDelta: "stable",
     },
     {
@@ -122,8 +133,8 @@ const Dashboard = () => {
       source: "UNESCO UIS",
       year: "2023",
       icon: GraduationCap,
-      tone: "soft" as const,
-      trend: "up" as const,
+      tone: "soft",
+      trend: "up",
       trendDelta: country.code === "PK" ? "+1.8 pts YoY" : "+1.4 pts YoY",
     },
     {
@@ -133,8 +144,8 @@ const Dashboard = () => {
       source: "Wittgenstein Centre",
       year: "Proj. 2035",
       icon: TrendingUp,
-      tone: "soft" as const,
-      trend: "up" as const,
+      tone: "soft",
+      trend: "up",
       trendDelta: "projected",
     },
   ];
