@@ -258,17 +258,30 @@ export const countries: Record<CountryCode, CountryData> = {
         level: "critical",
         title: "Reskill textile workers toward technical roles",
         body: "High automation risk paired with shrinking employment makes textile a systemic risk for Nigerian youth. Pivot toward electrical and last-mile logistics roles.",
+        justification: "70% Frey-Osborne automation risk · -0.5% YoY employment growth in textiles",
       },
       {
         level: "opportunity",
         title: "Tech sector growing 12% annually — fastest of any sector",
         body: "Demand outpaces supply by more than 3×. Lagos and Abuja fintech apprenticeships can absorb senior-secondary graduates within 12 months.",
+        justification: "Demand index 95 vs supply index 30 — gap of +65 points (Rozgar.ai · ILO)",
       },
       {
         level: "priority",
         title: "Expand vocational certification recognition",
         body: "80% informal economy means most credentials are invisible to employers. Recognition-of-prior-learning frameworks unlock formal income for existing skilled workers.",
+        justification: "World Bank WDI 2023 — 80% of total employment is informal",
       },
+    ],
+    regionLabel: "Nigeria geopolitical zones · youth unemployment intensity",
+    regions: [
+      // Stylized Nigeria: 6 geopolitical zones in a 100×100 viewBox.
+      { id: "NW", name: "North West", d: "M10,12 L48,8 L52,32 L42,40 L18,40 L8,30 Z", intensity: 0.92, unemployment: "57.2%" },
+      { id: "NE", name: "North East", d: "M48,8 L88,12 L92,38 L70,42 L52,32 Z", intensity: 0.88, unemployment: "55.6%" },
+      { id: "NC", name: "North Central", d: "M18,40 L42,40 L52,32 L70,42 L62,62 L30,62 Z", intensity: 0.7, unemployment: "48.1%" },
+      { id: "SW", name: "South West", d: "M8,62 L30,62 L34,86 L14,90 Z", intensity: 0.95, unemployment: "59.4%" },
+      { id: "SS", name: "South South", d: "M30,62 L62,62 L66,86 L34,86 Z", intensity: 0.78, unemployment: "51.8%" },
+      { id: "SE", name: "South East", d: "M62,62 L92,58 L88,86 L66,86 Z", intensity: 0.65, unemployment: "46.2%" },
     ],
   },
 };
