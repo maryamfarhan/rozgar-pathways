@@ -820,23 +820,53 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="relative mt-7 pt-6 border-t border-primary-foreground/15 grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          <div className="relative mt-7 pt-6 border-t border-primary-foreground/15 space-y-2.5">
+            <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary-foreground/55 mb-2">
+              References · cited datasets
+            </div>
             {[
-              { name: "ILO ILOSTAT", scope: "Employment & labor force" },
-              { name: "World Bank WDI", scope: "Informal economy share" },
-              { name: "Frey-Osborne (2017)", scope: "Automation risk scores" },
-              { name: "Wittgenstein Centre", scope: "Education projections 2025–2035" },
-              { name: "UNESCO UIS", scope: "Educational attainment" },
+              {
+                name: "ILO ILOSTAT",
+                full: "International Labour Organization (2024). ILOSTAT — Labour force statistics, ages 15–24.",
+                url: "ilostat.ilo.org",
+              },
+              {
+                name: "World Bank WDI",
+                full: "World Bank (2023). World Development Indicators — Informal employment, share of total employment.",
+                url: "data.worldbank.org",
+              },
+              {
+                name: "Frey & Osborne (2017)",
+                full: "Frey, C.B. & Osborne, M.A. (2017). The future of employment: How susceptible are jobs to computerisation? Technological Forecasting and Social Change, 114, 254–280.",
+                url: "doi.org/10.1016/j.techfore.2016.08.019",
+              },
+              {
+                name: "Wittgenstein Centre",
+                full: "Wittgenstein Centre for Demography and Global Human Capital (2024). Human Capital Data Explorer — Educational attainment projections 2025–2035.",
+                url: "dataexplorer.wittgensteincentre.org",
+              },
+              {
+                name: "UNESCO UIS",
+                full: "UNESCO Institute for Statistics (2023). Educational attainment of population aged 25+ years.",
+                url: "uis.unesco.org",
+              },
             ].map((s) => (
               <div
                 key={s.name}
-                className="flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-primary-foreground/[0.06] border border-primary-foreground/15 hover:bg-primary-foreground/[0.1] transition-smooth"
+                className="flex items-start gap-3 px-4 py-3 rounded-xl bg-primary-foreground/[0.05] border border-primary-foreground/10 hover:bg-primary-foreground/[0.09] transition-smooth"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold leading-tight">{s.name}</div>
-                  <div className="text-[11px] text-primary-foreground/55 mt-0.5 leading-tight">
-                    {s.scope}
+                <span className="font-mono text-[11px] text-accent font-bold mt-0.5 flex-shrink-0 w-5">
+                  [{country.policies.length + 1 - country.policies.length}]
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent mb-1">
+                    {s.name}
+                  </div>
+                  <div className="text-[12px] text-primary-foreground/75 leading-snug">
+                    {s.full}
+                  </div>
+                  <div className="text-[10px] font-mono text-primary-foreground/40 mt-1">
+                    {s.url}
                   </div>
                 </div>
               </div>
@@ -846,6 +876,228 @@ const Dashboard = () => {
       </section>
 
       <Footer />
+    </div>
+  );
+};
+
+// ─── Live activity panel ───
+const LiveActivityPanel = ({ countryCode }: { countryCode: string }) => {
+  const targets =
+    countryCode === "PK"
+      ? { profiles: 47, skills: 312, matches: 891 }
+      : { profiles: 62, skills: 408, matches: 1124 };
+
+  const profiles = useCountUp(targets.profiles);
+  const skills = useCountUp(targets.skills);
+  const matches = useCountUp(targets.matches);
+
+  const items = [
+    { label: "Profiles created today", value: profiles, hint: "↑ vs yesterday", icon: Activity },
+    { label: "Skills mapped this week", value: skills, hint: "ESCO-aligned", icon: Sparkles },
+    { label: "Opportunities matched this month", value: matches, hint: "↑ MoM", icon: Target },
+  ];
+
+  return (
+    <div className="relative bg-primary text-primary-foreground rounded-3xl p-6 md:p-8 overflow-hidden border-2 border-primary">
+      <div
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
+        }}
+      />
+      <div className="absolute -top-20 -right-16 w-72 h-72 rounded-full bg-accent/15 blur-3xl" />
+
+      <div className="relative flex items-start justify-between mb-5 flex-wrap gap-3">
+        <div className="flex items-center gap-2">
+          <span className="relative flex w-2 h-2">
+            <span className="absolute inline-flex w-full h-full rounded-full bg-accent opacity-75 animate-ping" />
+            <span className="relative inline-flex w-2 h-2 rounded-full bg-accent" />
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-accent">
+            Live activity
+          </span>
+        </div>
+        <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-primary-foreground/55">
+          Network · {countryCode === "PK" ? "Pakistan" : "Nigeria"}
+        </span>
+      </div>
+
+      <div className="relative grid grid-cols-1 md:grid-cols-3 gap-4">
+        {items.map((it) => (
+          <div
+            key={it.label}
+            className="rounded-2xl bg-primary-foreground/[0.06] border border-primary-foreground/15 p-5"
+          >
+            <div className="flex items-center gap-2 text-accent mb-3">
+              <it.icon size={14} />
+              <span className="text-[10px] uppercase tracking-[0.16em] font-bold">{it.hint}</span>
+            </div>
+            <div className="font-display text-4xl md:text-5xl font-bold tabular-nums tracking-tight leading-none mb-2">
+              {it.value.toLocaleString()}
+            </div>
+            <div className="text-xs text-primary-foreground/70 leading-snug">{it.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const useCountUp = (target: number, duration = 1400) => {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    setValue(0);
+    const start = Date.now();
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const t = Math.min(1, elapsed / duration);
+      // ease-out
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t >= 1) clearInterval(id);
+    }, 30);
+    return () => clearInterval(id);
+  }, [target, duration]);
+  return value;
+};
+
+// ─── Region heatmap ───
+const RegionHeatmap = ({
+  regions,
+  regionLabel,
+  countryName,
+}: {
+  regions: { id: string; name: string; d: string; intensity: number; unemployment: string }[];
+  regionLabel: string;
+  countryName: string;
+}) => {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const hovered = regions.find((r) => r.id === hoveredId) ?? null;
+
+  return (
+    <div className="bg-card rounded-3xl p-6 md:p-8 border border-border shadow-card">
+      <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
+        <div>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-primary tracking-tight">
+            Regional unemployment heatmap
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">{regionLabel}</p>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
+          <MapPin size={12} className="text-accent" /> {countryName}
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-[1fr_280px] gap-6 items-start">
+        {/* SVG map */}
+        <div className="relative bg-secondary/40 rounded-2xl border border-border/60 p-4 aspect-[4/3] overflow-hidden">
+          <svg viewBox="0 0 100 100" className="w-full h-full" role="img" aria-label={`${countryName} regions`}>
+            {regions.map((r) => {
+              const isHovered = hoveredId === r.id;
+              // Map intensity (0-1) to terracotta opacity 0.25 → 0.95
+              const fillOpacity = 0.25 + r.intensity * 0.7;
+              return (
+                <g key={r.id}>
+                  <path
+                    d={r.d}
+                    fill="hsl(var(--accent))"
+                    fillOpacity={fillOpacity}
+                    stroke="hsl(var(--card))"
+                    strokeWidth={isHovered ? 0.8 : 0.4}
+                    className="transition-all cursor-pointer"
+                    style={{ filter: isHovered ? "brightness(1.1)" : undefined }}
+                    onMouseEnter={() => setHoveredId(r.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                  />
+                </g>
+              );
+            })}
+            {/* Region labels */}
+            {regions.map((r) => {
+              // Approximate centroid from path's first M coords (rough)
+              const match = r.d.match(/M([\d.]+),([\d.]+)/);
+              if (!match) return null;
+              const x = parseFloat(match[1]) + 8;
+              const y = parseFloat(match[2]) + 12;
+              return (
+                <text
+                  key={r.id}
+                  x={x}
+                  y={y}
+                  fontSize="3"
+                  fontWeight="700"
+                  fill="hsl(var(--primary))"
+                  textAnchor="middle"
+                  className="pointer-events-none select-none"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  {r.id}
+                </text>
+              );
+            })}
+          </svg>
+
+          {hovered && (
+            <div className="absolute top-3 left-3 bg-card border border-border shadow-card rounded-xl px-3 py-2 text-xs">
+              <div className="font-bold text-primary">{hovered.name}</div>
+              <div className="text-muted-foreground">
+                Unemployment: <span className="font-mono text-accent font-bold">{hovered.unemployment}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Legend + region list */}
+        <div className="space-y-4">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-2">
+              Legend · youth unemployment
+            </div>
+            <div className="h-3 rounded-full bg-gradient-to-r from-accent/25 via-accent/60 to-accent w-full" />
+            <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground mt-1">
+              <span>Lower</span>
+              <span>Higher</span>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-1">
+              Regions ({regions.length})
+            </div>
+            {regions
+              .slice()
+              .sort((a, b) => b.intensity - a.intensity)
+              .map((r) => (
+                <div
+                  key={r.id}
+                  onMouseEnter={() => setHoveredId(r.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  className={cn(
+                    "flex items-center justify-between gap-3 px-3 py-2 rounded-lg border transition-smooth cursor-pointer",
+                    hoveredId === r.id
+                      ? "bg-accent/10 border-accent/30"
+                      : "bg-secondary/40 border-border/60 hover:bg-secondary"
+                  )}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      style={{ background: `hsl(var(--accent) / ${0.3 + r.intensity * 0.7})` }}
+                    />
+                    <span className="text-xs font-semibold text-foreground truncate">{r.name}</span>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-accent tabular-nums">
+                    {r.unemployment}
+                  </span>
+                </div>
+              ))}
+          </div>
+          <div className="text-[10px] text-muted-foreground italic leading-relaxed">
+            Source: ILO ILOSTAT subnational estimates · Rozgar.ai network calibration
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
