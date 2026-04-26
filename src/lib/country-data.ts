@@ -38,6 +38,18 @@ export interface PolicyRecommendation {
   level: "critical" | "opportunity" | "priority";
   title: string;
   body: string;
+  justification: string;
+}
+
+export interface RegionPath {
+  id: string;
+  name: string;
+  // SVG path for region polygon (in 0-100 viewBox units)
+  d: string;
+  // 0-1 unemployment intensity for shading
+  intensity: number;
+  // display unemployment %
+  unemployment: string;
 }
 
 export interface CountryData {
