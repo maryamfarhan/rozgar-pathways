@@ -78,6 +78,8 @@ export interface CountryData {
   educationProjection: EducationPoint[];
   sectorBubbles: SectorBubble[];
   policies: PolicyRecommendation[];
+  regions: RegionPath[];
+  regionLabel: string; // e.g. "Pakistan provinces"
 }
 
 const PK_EDUCATION: EducationPoint[] = [
