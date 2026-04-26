@@ -850,13 +850,13 @@ const Dashboard = () => {
                 full: "UNESCO Institute for Statistics (2023). Educational attainment of population aged 25+ years.",
                 url: "uis.unesco.org",
               },
-            ].map((s) => (
+            ].map((s, i) => (
               <div
                 key={s.name}
                 className="flex items-start gap-3 px-4 py-3 rounded-xl bg-primary-foreground/[0.05] border border-primary-foreground/10 hover:bg-primary-foreground/[0.09] transition-smooth"
               >
-                <span className="font-mono text-[11px] text-accent font-bold mt-0.5 flex-shrink-0 w-5">
-                  [{country.policies.length + 1 - country.policies.length}]
+                <span className="font-mono text-[11px] text-accent font-bold mt-0.5 flex-shrink-0 w-6">
+                  [{i + 1}]
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent mb-1">
