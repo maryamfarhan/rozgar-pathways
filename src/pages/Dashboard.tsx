@@ -174,6 +174,18 @@ const Dashboard = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
 
+      {/* Institutional top banner */}
+      <div className="bg-primary text-primary-foreground border-b border-primary/40">
+        <div className="container max-w-7xl mx-auto px-4 md:px-6 py-2 flex items-center justify-center gap-2 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.18em] text-center">
+          <Lock size={11} className="text-accent flex-shrink-0" />
+          <span className="text-primary-foreground/90">
+            Rozgar.ai Program Intelligence Platform
+          </span>
+          <span className="hidden sm:inline text-primary-foreground/40">·</span>
+          <span className="hidden sm:inline text-accent">For Verified Organizations Only</span>
+        </div>
+      </div>
+
       {/* Logged-in band */}
       {user && (
         <div className="border-b border-border bg-card/60 backdrop-blur-sm">
@@ -212,7 +224,26 @@ const Dashboard = () => {
                 Aggregate signal from Rozgar.ai's profile network in {country.name} — updated continuously.
               </p>
             </div>
-            <CountrySwitcher variant="prominent" />
+            <div className="flex flex-col gap-4 lg:items-end">
+              <CountrySwitcher variant="prominent" />
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  onClick={handleDownloadReport}
+                  size="sm"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-full px-4 text-xs font-semibold"
+                >
+                  <Download size={14} className="mr-1.5" /> Download Report
+                </Button>
+                <Button
+                  onClick={handleShare}
+                  size="sm"
+                  variant="outline"
+                  className="h-9 rounded-full px-4 text-xs font-semibold border-primary/20 bg-card hover:bg-secondary"
+                >
+                  <Share2 size={14} className="mr-1.5" /> Share Dashboard
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -220,59 +251,84 @@ const Dashboard = () => {
       <section className="container max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14 flex-1 w-full space-y-8">
         {/* STAT CARDS */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {statCards.map((s) => (
-            <div
-              key={s.label}
-              className={cn(
-                "relative rounded-3xl p-6 overflow-hidden border-2 shadow-card",
-                s.tone === "accent" && "bg-accent text-accent-foreground border-accent",
-                s.tone === "primary" && "bg-primary text-primary-foreground border-primary",
-                s.tone === "soft" && "bg-card text-foreground border-border"
-              )}
-            >
+          {statCards.map((s) => {
+            const TrendArrow = trendIcon(s.trend);
+            const trendColor =
+              s.trend === "up"
+                ? s.tone === "soft"
+                  ? "text-accent"
+                  : "text-accent-foreground"
+                : s.trend === "down"
+                  ? "text-destructive"
+                  : "text-muted-foreground";
+            return (
               <div
-                className="absolute inset-0 opacity-[0.07]"
-                style={{
-                  backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
-                  backgroundSize: "18px 18px",
-                }}
-              />
-              <div className="relative">
-                <div className="flex items-start justify-between mb-5">
-                  <s.icon size={22} className={s.tone === "soft" ? "text-accent" : "opacity-80"} />
-                  <span
+                key={s.label}
+                className={cn(
+                  "relative rounded-3xl p-6 overflow-hidden border-2 shadow-card",
+                  s.tone === "accent" && "bg-accent text-accent-foreground border-accent",
+                  s.tone === "primary" && "bg-primary text-primary-foreground border-primary",
+                  s.tone === "soft" && "bg-card text-foreground border-border"
+                )}
+              >
+                <div
+                  className="absolute inset-0 opacity-[0.07]"
+                  style={{
+                    backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
+                    backgroundSize: "18px 18px",
+                  }}
+                />
+                <div className="relative">
+                  <div className="flex items-start justify-between mb-5">
+                    <s.icon size={22} className={s.tone === "soft" ? "text-accent" : "opacity-80"} />
+                    <div
+                      className={cn(
+                        "flex flex-col items-end gap-0.5 text-right",
+                        s.tone === "soft" ? "text-muted-foreground" : "opacity-80"
+                      )}
+                    >
+                      <span className="text-[9px] uppercase tracking-[0.16em] font-bold">
+                        {s.source}
+                      </span>
+                      <span className="text-[9px] uppercase tracking-[0.14em] font-bold opacity-70">
+                        {s.year}
+                      </span>
+                    </div>
+                  </div>
+                  <div
                     className={cn(
-                      "text-[9px] uppercase tracking-[0.16em] font-bold",
-                      s.tone === "soft" ? "text-muted-foreground" : "opacity-70"
+                      "font-display font-bold tracking-[-0.04em] leading-[0.9] mb-2 flex items-end gap-2",
+                      "text-5xl md:text-6xl",
+                      s.tone === "soft" && "text-primary"
                     )}
                   >
-                    {s.source}
-                  </span>
-                </div>
-                <div
-                  className={cn(
-                    "font-display font-bold tracking-[-0.04em] leading-[0.9] mb-2",
-                    "text-5xl md:text-6xl",
-                    s.tone === "soft" && "text-primary"
-                  )}
-                >
-                  {s.value}
-                </div>
-                <div className="font-display text-base font-semibold mb-1 leading-tight">
-                  {s.label}
-                </div>
-                <div
-                  className={cn(
-                    "text-xs",
-                    s.tone === "soft" ? "text-muted-foreground" : "opacity-75"
-                  )}
-                >
-                  {s.caption}
+                    <span>{s.value}</span>
+                    <TrendArrow
+                      size={18}
+                      className={cn("mb-2", trendColor, s.tone !== "soft" && "opacity-90")}
+                    />
+                  </div>
+                  <div className="font-display text-base font-semibold mb-1 leading-tight">
+                    {s.label}
+                  </div>
+                  <div
+                    className={cn(
+                      "text-xs flex items-center gap-1.5",
+                      s.tone === "soft" ? "text-muted-foreground" : "opacity-75"
+                    )}
+                  >
+                    <span>{s.caption}</span>
+                    <span className="opacity-50">·</span>
+                    <span className="font-semibold">{s.trendDelta}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* LIVE ACTIVITY PANEL */}
+        <LiveActivityPanel countryCode={country.code} />
 
         {/* SKILLS GAP TABLE */}
         <div className="bg-card rounded-3xl p-6 md:p-8 border border-border shadow-card">
