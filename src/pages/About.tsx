@@ -120,7 +120,7 @@ const About = () => {
               World Bank UNMAPPED Challenge
             </p>
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full font-semibold shadow-warm h-12 px-7">
-              <a href="#" target="_blank" rel="noreferrer">
+              <a href="https://github.com/maryamfarhan/rozgar-pathways" target="_blank" rel="noreferrer">
                 <Github size={16} className="mr-2" /> View on GitHub
               </a>
             </Button>
