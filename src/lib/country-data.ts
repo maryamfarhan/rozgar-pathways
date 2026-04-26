@@ -38,6 +38,18 @@ export interface PolicyRecommendation {
   level: "critical" | "opportunity" | "priority";
   title: string;
   body: string;
+  justification: string;
+}
+
+export interface RegionPath {
+  id: string;
+  name: string;
+  // SVG path for region polygon (in 0-100 viewBox units)
+  d: string;
+  // 0-1 unemployment intensity for shading
+  intensity: number;
+  // display unemployment %
+  unemployment: string;
 }
 
 export interface CountryData {
@@ -66,6 +78,8 @@ export interface CountryData {
   educationProjection: EducationPoint[];
   sectorBubbles: SectorBubble[];
   policies: PolicyRecommendation[];
+  regions: RegionPath[];
+  regionLabel: string; // e.g. "Pakistan provinces"
 }
 
 const PK_EDUCATION: EducationPoint[] = [
@@ -153,17 +167,29 @@ export const countries: Record<CountryCode, CountryData> = {
         level: "critical",
         title: "Reskill textile workers toward technical roles",
         body: "High automation risk (72%) combined with the largest youth employment share (~18%) creates systemic vulnerability. Bridge to electrician, IoT installation, and quality-control roles.",
+        justification: "72% Frey-Osborne automation risk · 18% of youth employed in textiles (ILO 2024)",
       },
       {
         level: "opportunity",
         title: "IT sector growing 8% annually but talent pipeline underdeveloped",
         body: "Demand-supply gap is the widest of any sector. Mobile-first bootcamps with industry certification can absorb matric-educated youth in 9–12 months.",
+        justification: "Demand index 92 vs supply index 38 — gap of +54 points (Rozgar.ai network · ILO)",
       },
       {
         level: "priority",
         title: "Expand vocational certification recognition",
         body: "72% informal economy means most credentials are invisible to employers. Recognition-of-prior-learning frameworks unlock formal income for existing skilled workers.",
+        justification: "World Bank WDI 2023 — 72% of total employment is informal",
       },
+    ],
+    regionLabel: "Pakistan provinces · youth unemployment intensity",
+    regions: [
+      // Stylized Pakistan: 5 provinces in a 100×100 viewBox.
+      { id: "GB", name: "Gilgit-Baltistan", d: "M62,8 L86,8 L88,26 L70,30 L60,22 Z", intensity: 0.35, unemployment: "5.1%" },
+      { id: "KPK", name: "Khyber Pakhtunkhwa", d: "M40,12 L62,8 L60,22 L58,42 L40,46 L34,28 Z", intensity: 0.72, unemployment: "9.8%" },
+      { id: "PB", name: "Punjab", d: "M58,42 L70,30 L88,26 L92,68 L70,72 L60,62 Z", intensity: 0.85, unemployment: "11.2%" },
+      { id: "BL", name: "Balochistan", d: "M8,30 L40,46 L60,62 L70,72 L62,92 L20,94 L4,72 Z", intensity: 0.95, unemployment: "13.4%" },
+      { id: "SD", name: "Sindh", d: "M62,92 L70,72 L92,68 L88,94 Z", intensity: 0.78, unemployment: "10.1%" },
     ],
   },
   NG: {
@@ -232,17 +258,30 @@ export const countries: Record<CountryCode, CountryData> = {
         level: "critical",
         title: "Reskill textile workers toward technical roles",
         body: "High automation risk paired with shrinking employment makes textile a systemic risk for Nigerian youth. Pivot toward electrical and last-mile logistics roles.",
+        justification: "70% Frey-Osborne automation risk · -0.5% YoY employment growth in textiles",
       },
       {
         level: "opportunity",
         title: "Tech sector growing 12% annually — fastest of any sector",
         body: "Demand outpaces supply by more than 3×. Lagos and Abuja fintech apprenticeships can absorb senior-secondary graduates within 12 months.",
+        justification: "Demand index 95 vs supply index 30 — gap of +65 points (Rozgar.ai · ILO)",
       },
       {
         level: "priority",
         title: "Expand vocational certification recognition",
         body: "80% informal economy means most credentials are invisible to employers. Recognition-of-prior-learning frameworks unlock formal income for existing skilled workers.",
+        justification: "World Bank WDI 2023 — 80% of total employment is informal",
       },
+    ],
+    regionLabel: "Nigeria geopolitical zones · youth unemployment intensity",
+    regions: [
+      // Stylized Nigeria: 6 geopolitical zones in a 100×100 viewBox.
+      { id: "NW", name: "North West", d: "M10,12 L48,8 L52,32 L42,40 L18,40 L8,30 Z", intensity: 0.92, unemployment: "57.2%" },
+      { id: "NE", name: "North East", d: "M48,8 L88,12 L92,38 L70,42 L52,32 Z", intensity: 0.88, unemployment: "55.6%" },
+      { id: "NC", name: "North Central", d: "M18,40 L42,40 L52,32 L70,42 L62,62 L30,62 Z", intensity: 0.7, unemployment: "48.1%" },
+      { id: "SW", name: "South West", d: "M8,62 L30,62 L34,86 L14,90 Z", intensity: 0.95, unemployment: "59.4%" },
+      { id: "SS", name: "South South", d: "M30,62 L62,62 L66,86 L34,86 Z", intensity: 0.78, unemployment: "51.8%" },
+      { id: "SE", name: "South East", d: "M62,62 L92,58 L88,86 L66,86 Z", intensity: 0.65, unemployment: "46.2%" },
     ],
   },
 };

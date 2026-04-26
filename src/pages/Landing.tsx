@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CountrySwitcher } from "@/components/CountrySwitcher";
 import { Button } from "@/components/ui/button";
 import { useCountry } from "@/contexts/CountryContext";
-import { ArrowRight, Compass, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Compass, Shield, Sparkles, Users, Building2, Globe2 } from "lucide-react";
 
 const Landing = () => {
   const { country } = useCountry();
@@ -142,6 +143,96 @@ const Landing = () => {
 
         {/* Soft transition into next section */}
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-background pointer-events-none" />
+      </section>
+
+      {/* Animated counter strip */}
+      <CounterStrip />
+
+      {/* Two portals */}
+      <section className="container max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-4">
+            Built for everyone in the loop
+          </div>
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-primary mb-4 tracking-[-0.03em] leading-[1]">
+            Two portals.<br />One infrastructure.
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Same data layer, two surfaces — designed for the people whose decisions actually move the labor market.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Youth portal — terracotta */}
+          <Link
+            to="/youth"
+            className="group relative overflow-hidden rounded-[2rem] p-8 md:p-10 bg-accent text-accent-foreground shadow-warm transition-smooth hover:-translate-y-2"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.1]"
+              style={{
+                backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+              }}
+            />
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 blur-3xl" />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center backdrop-blur-sm">
+                  <Users size={26} />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">
+                  For Youth
+                </span>
+              </div>
+              <h3 className="font-display text-3xl md:text-4xl font-bold leading-[1.05] tracking-[-0.02em] mb-3">
+                Youth Portal
+              </h3>
+              <p className="text-accent-foreground/85 text-base leading-relaxed mb-7 max-w-md">
+                Map the work you've actually done — paid, unpaid, informal — to a verified profile and real income paths in your city.
+              </p>
+              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em]">
+                <span>Get started</span>
+                <ArrowRight size={16} className="transition-smooth group-hover:translate-x-1.5" />
+              </div>
+            </div>
+          </Link>
+
+          {/* Org portal — deep blue */}
+          <Link
+            to="/login"
+            className="group relative overflow-hidden rounded-[2rem] p-8 md:p-10 bg-primary text-primary-foreground shadow-warm transition-smooth hover:-translate-y-2"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.08]"
+              style={{
+                backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+              }}
+            />
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-accent/20 blur-3xl" />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center backdrop-blur-sm text-accent">
+                  <Building2 size={26} />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-accent">
+                  For Organizations
+                </span>
+              </div>
+              <h3 className="font-display text-3xl md:text-4xl font-bold leading-[1.05] tracking-[-0.02em] mb-3">
+                Organization Portal
+              </h3>
+              <p className="text-primary-foreground/75 text-base leading-relaxed mb-7 max-w-md">
+                Live skills-gap intelligence, automation risk, and policy briefs — built for NGOs, training providers, and government program officers.
+              </p>
+              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-accent">
+                <span>Sign in</span>
+                <ArrowRight size={16} className="transition-smooth group-hover:translate-x-1.5" />
+              </div>
+            </div>
+          </Link>
+        </div>
       </section>
 
       {/* Big stat */}
@@ -310,4 +401,83 @@ const Landing = () => {
   );
 };
 
+// ─── Animated counter strip ───
+const CounterStrip = () => {
+  const youth = useCountUp(600, 1600);
+  const countries = useCountUp(190, 1600);
+
+  return (
+    <section className="relative bg-primary text-primary-foreground overflow-hidden border-y border-primary/40">
+      <div
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+        }}
+      />
+      <div className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full bg-accent/15 blur-[120px]" />
+
+      <div className="container max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12 relative">
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Globe2 size={14} className="text-accent" />
+          <span className="text-[10px] uppercase tracking-[0.24em] font-bold text-accent">
+            One infrastructure layer
+          </span>
+        </div>
+        <div className="grid grid-cols-3 gap-4 md:gap-10 items-end">
+          <CounterCell value={`${youth}M`} label="young people" subtle="globally underserved" />
+          <CounterCell value={`${countries}+`} label="countries" subtle="ready for deployment" accent />
+          <CounterCell value="1" label="infrastructure layer" subtle="open · interoperable" />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CounterCell = ({
+  value,
+  label,
+  subtle,
+  accent,
+}: {
+  value: string;
+  label: string;
+  subtle: string;
+  accent?: boolean;
+}) => (
+  <div className="text-center">
+    <div
+      className={`font-display font-bold tracking-[-0.04em] leading-[0.85] tabular-nums text-[3rem] sm:text-6xl md:text-7xl ${
+        accent ? "text-accent" : "text-primary-foreground"
+      }`}
+    >
+      {value}
+    </div>
+    <div className="mt-3 text-sm md:text-base font-display font-semibold text-primary-foreground/90">
+      {label}
+    </div>
+    <div className="text-[10px] uppercase tracking-[0.18em] font-bold text-primary-foreground/45 mt-1">
+      {subtle}
+    </div>
+  </div>
+);
+
+const useCountUp = (target: number, duration = 1400) => {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    setValue(0);
+    const start = Date.now();
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t >= 1) clearInterval(id);
+    }, 30);
+    return () => clearInterval(id);
+  }, [target, duration]);
+  return value;
+};
+
 export default Landing;
+

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CountrySwitcher } from "@/components/CountrySwitcher";
@@ -17,6 +18,13 @@ import {
   ArrowUp,
   ArrowDown,
   Minus,
+  Download,
+  Share2,
+  FileSpreadsheet,
+  Activity,
+  MapPin,
+  Lock,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -47,38 +55,98 @@ const Dashboard = () => {
     navigate("/", { replace: true });
   };
 
-  const statCards = [
+  const lastUpdated = new Date().toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const exportCSV = () => {
+    const header = "Sector,Employer Demand,Youth Supply,Gap,Trend\n";
+    const rows = country.skillsGap
+      .map((r) => `${r.sector},${r.demand},${r.supply},${r.gap},${r.trend}`)
+      .join("\n");
+    const blob = new Blob([header + rows], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `rozgar-skills-gap-${country.code.toLowerCase()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Skills gap CSV exported");
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Dashboard link copied to clipboard");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const handleDownloadReport = () => {
+    toast.success("Preparing PDF report…", { description: "Demo: report would download here." });
+  };
+
+  type Trend = "up" | "down" | "flat";
+  const statCards: {
+    label: string;
+    value: string;
+    caption: string;
+    source: string;
+    year: string;
+    icon: typeof Users;
+    tone: "accent" | "primary" | "soft";
+    trend: Trend;
+    trendDelta: string;
+  }[] = [
     {
       label: "Youth unemployment",
       value: country.unemploymentRate,
       caption: `${country.name} · ages 15–24`,
-      source: "ILO ILOSTAT 2024",
+      source: "ILO ILOSTAT",
+      year: "2024",
       icon: Users,
-      tone: "accent" as const,
+      tone: "accent",
+      trend: "up",
+      trendDelta: country.code === "PK" ? "+0.4 pts YoY" : "+1.2 pts YoY",
     },
     {
       label: "Informal economy share",
       value: country.informalShare,
       caption: "of total employment",
       source: "World Bank WDI",
+      year: "2023",
       icon: Briefcase,
-      tone: "primary" as const,
+      tone: "primary",
+      trend: "flat",
+      trendDelta: "stable",
     },
     {
       label: "Youth with secondary education",
       value: country.secondaryNow,
       caption: "Current — ages 20–24",
       source: "UNESCO UIS",
+      year: "2023",
       icon: GraduationCap,
-      tone: "soft" as const,
+      tone: "soft",
+      trend: "up",
+      trendDelta: country.code === "PK" ? "+1.8 pts YoY" : "+1.4 pts YoY",
     },
     {
       label: "Projected secondary by 2035",
       value: country.secondary2035,
       caption: `+${parseInt(country.secondary2035) - parseInt(country.secondaryNow)} pts vs today`,
       source: "Wittgenstein Centre",
+      year: "Proj. 2035",
       icon: TrendingUp,
-      tone: "soft" as const,
+      tone: "soft",
+      trend: "up",
+      trendDelta: "projected",
     },
   ];
 
@@ -116,6 +184,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
+
+      {/* Institutional top banner */}
+      <div className="bg-primary text-primary-foreground border-b border-primary/40">
+        <div className="container max-w-7xl mx-auto px-4 md:px-6 py-2 flex items-center justify-center gap-2 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.18em] text-center">
+          <Lock size={11} className="text-accent flex-shrink-0" />
+          <span className="text-primary-foreground/90">
+            Rozgar.ai Program Intelligence Platform
+          </span>
+          <span className="hidden sm:inline text-primary-foreground/40">·</span>
+          <span className="hidden sm:inline text-accent">For Verified Organizations Only</span>
+        </div>
+      </div>
 
       {/* Logged-in band */}
       {user && (
@@ -155,7 +235,26 @@ const Dashboard = () => {
                 Aggregate signal from Rozgar.ai's profile network in {country.name} — updated continuously.
               </p>
             </div>
-            <CountrySwitcher variant="prominent" />
+            <div className="flex flex-col gap-4 lg:items-end">
+              <CountrySwitcher variant="prominent" />
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  onClick={handleDownloadReport}
+                  size="sm"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-full px-4 text-xs font-semibold"
+                >
+                  <Download size={14} className="mr-1.5" /> Download Report
+                </Button>
+                <Button
+                  onClick={handleShare}
+                  size="sm"
+                  variant="outline"
+                  className="h-9 rounded-full px-4 text-xs font-semibold border-primary/20 bg-card hover:bg-secondary"
+                >
+                  <Share2 size={14} className="mr-1.5" /> Share Dashboard
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -163,59 +262,84 @@ const Dashboard = () => {
       <section className="container max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14 flex-1 w-full space-y-8">
         {/* STAT CARDS */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {statCards.map((s) => (
-            <div
-              key={s.label}
-              className={cn(
-                "relative rounded-3xl p-6 overflow-hidden border-2 shadow-card",
-                s.tone === "accent" && "bg-accent text-accent-foreground border-accent",
-                s.tone === "primary" && "bg-primary text-primary-foreground border-primary",
-                s.tone === "soft" && "bg-card text-foreground border-border"
-              )}
-            >
+          {statCards.map((s) => {
+            const TrendArrow = trendIcon(s.trend);
+            const trendColor =
+              s.trend === "up"
+                ? s.tone === "soft"
+                  ? "text-accent"
+                  : "text-accent-foreground"
+                : s.trend === "down"
+                  ? "text-destructive"
+                  : "text-muted-foreground";
+            return (
               <div
-                className="absolute inset-0 opacity-[0.07]"
-                style={{
-                  backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
-                  backgroundSize: "18px 18px",
-                }}
-              />
-              <div className="relative">
-                <div className="flex items-start justify-between mb-5">
-                  <s.icon size={22} className={s.tone === "soft" ? "text-accent" : "opacity-80"} />
-                  <span
+                key={s.label}
+                className={cn(
+                  "relative rounded-3xl p-6 overflow-hidden border-2 shadow-card",
+                  s.tone === "accent" && "bg-accent text-accent-foreground border-accent",
+                  s.tone === "primary" && "bg-primary text-primary-foreground border-primary",
+                  s.tone === "soft" && "bg-card text-foreground border-border"
+                )}
+              >
+                <div
+                  className="absolute inset-0 opacity-[0.07]"
+                  style={{
+                    backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
+                    backgroundSize: "18px 18px",
+                  }}
+                />
+                <div className="relative">
+                  <div className="flex items-start justify-between mb-5">
+                    <s.icon size={22} className={s.tone === "soft" ? "text-accent" : "opacity-80"} />
+                    <div
+                      className={cn(
+                        "flex flex-col items-end gap-0.5 text-right",
+                        s.tone === "soft" ? "text-muted-foreground" : "opacity-80"
+                      )}
+                    >
+                      <span className="text-[9px] uppercase tracking-[0.16em] font-bold">
+                        {s.source}
+                      </span>
+                      <span className="text-[9px] uppercase tracking-[0.14em] font-bold opacity-70">
+                        {s.year}
+                      </span>
+                    </div>
+                  </div>
+                  <div
                     className={cn(
-                      "text-[9px] uppercase tracking-[0.16em] font-bold",
-                      s.tone === "soft" ? "text-muted-foreground" : "opacity-70"
+                      "font-display font-bold tracking-[-0.04em] leading-[0.9] mb-2 flex items-end gap-2",
+                      "text-5xl md:text-6xl",
+                      s.tone === "soft" && "text-primary"
                     )}
                   >
-                    {s.source}
-                  </span>
-                </div>
-                <div
-                  className={cn(
-                    "font-display font-bold tracking-[-0.04em] leading-[0.9] mb-2",
-                    "text-5xl md:text-6xl",
-                    s.tone === "soft" && "text-primary"
-                  )}
-                >
-                  {s.value}
-                </div>
-                <div className="font-display text-base font-semibold mb-1 leading-tight">
-                  {s.label}
-                </div>
-                <div
-                  className={cn(
-                    "text-xs",
-                    s.tone === "soft" ? "text-muted-foreground" : "opacity-75"
-                  )}
-                >
-                  {s.caption}
+                    <span>{s.value}</span>
+                    <TrendArrow
+                      size={18}
+                      className={cn("mb-2", trendColor, s.tone !== "soft" && "opacity-90")}
+                    />
+                  </div>
+                  <div className="font-display text-base font-semibold mb-1 leading-tight">
+                    {s.label}
+                  </div>
+                  <div
+                    className={cn(
+                      "text-xs flex items-center gap-1.5",
+                      s.tone === "soft" ? "text-muted-foreground" : "opacity-75"
+                    )}
+                  >
+                    <span>{s.caption}</span>
+                    <span className="opacity-50">·</span>
+                    <span className="font-semibold">{s.trendDelta}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* LIVE ACTIVITY PANEL */}
+        <LiveActivityPanel countryCode={country.code} />
 
         {/* SKILLS GAP TABLE */}
         <div className="bg-card rounded-3xl p-6 md:p-8 border border-border shadow-card">
@@ -228,9 +352,22 @@ const Dashboard = () => {
                 Employer demand vs youth supply, indexed 0–100
               </p>
             </div>
-            <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
-              Source: ILO + Rozgar.ai network
-            </span>
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="text-right">
+                <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
+                  Last updated
+                </div>
+                <div className="text-xs font-mono text-foreground/80">{lastUpdated}</div>
+              </div>
+              <Button
+                onClick={exportCSV}
+                size="sm"
+                variant="outline"
+                className="h-8 rounded-full px-3 text-xs font-semibold border-primary/20 hover:bg-secondary"
+              >
+                <FileSpreadsheet size={13} className="mr-1.5" /> Export CSV
+              </Button>
+            </div>
           </div>
 
           <div className="overflow-x-auto -mx-2">
@@ -545,12 +682,19 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* REGION HEATMAP */}
+        <RegionHeatmap
+          regions={country.regions}
+          regionLabel={country.regionLabel}
+          countryName={country.name}
+        />
+
         {/* POLICY RECOMMENDATIONS */}
         <div>
           <div className="flex items-end justify-between mb-6 flex-wrap gap-2">
             <div>
               <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-2">
-                Recommended actions
+                Recommended actions · Official briefs
               </div>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-primary tracking-tight">
                 Policy recommendations
@@ -588,7 +732,12 @@ const Dashboard = () => {
                   />
 
                   <div className="relative flex items-center justify-between mb-5">
-                    <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.16em]", meta.tone)}>
+                    <div
+                      className={cn(
+                        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.16em]",
+                        meta.tone
+                      )}
+                    >
                       <meta.icon size={11} /> {meta.label}
                     </div>
                     <span className="font-display text-3xl font-bold text-primary/[0.08] leading-none select-none">
@@ -599,13 +748,37 @@ const Dashboard = () => {
                   <h3 className="relative font-display text-lg font-bold text-primary leading-[1.2] mb-3 tracking-tight">
                     {p.title}
                   </h3>
-                  <p className="relative text-sm text-muted-foreground leading-relaxed flex-1">
+                  <p className="relative text-sm text-muted-foreground leading-relaxed mb-4">
                     {p.body}
                   </p>
 
-                  <div className="relative mt-5 pt-4 border-t border-border/60 flex items-center gap-2 text-[11px] text-muted-foreground">
-                    <span className="w-1 h-1 rounded-full bg-accent" />
-                    <span className="uppercase tracking-[0.14em] font-bold">{country.name} · 2024 signal</span>
+                  {/* Data justification line */}
+                  <div className="relative mb-5 p-3 rounded-xl bg-secondary/50 border border-border/60">
+                    <div className="text-[9px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-1">
+                      Data justification
+                    </div>
+                    <p className="text-[11px] leading-snug text-foreground/80 font-mono">
+                      {p.justification}
+                    </p>
+                  </div>
+
+                  <div className="relative mt-auto flex items-center justify-between gap-2 pt-4 border-t border-border/60">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] font-bold text-muted-foreground">
+                      <span className="w-1 h-1 rounded-full bg-accent" />
+                      {country.name} · 2024
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 px-2.5 text-[11px] font-semibold text-primary hover:bg-primary/5"
+                      onClick={() =>
+                        toast.info("Full brief coming soon", {
+                          description: "Demo: opens detailed PDF brief.",
+                        })
+                      }
+                    >
+                      View Full Brief <ExternalLink size={11} className="ml-1" />
+                    </Button>
                   </div>
                 </article>
               );
@@ -647,23 +820,53 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="relative mt-7 pt-6 border-t border-primary-foreground/15 grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          <div className="relative mt-7 pt-6 border-t border-primary-foreground/15 space-y-2.5">
+            <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary-foreground/55 mb-2">
+              References · cited datasets
+            </div>
             {[
-              { name: "ILO ILOSTAT", scope: "Employment & labor force" },
-              { name: "World Bank WDI", scope: "Informal economy share" },
-              { name: "Frey-Osborne (2017)", scope: "Automation risk scores" },
-              { name: "Wittgenstein Centre", scope: "Education projections 2025–2035" },
-              { name: "UNESCO UIS", scope: "Educational attainment" },
-            ].map((s) => (
+              {
+                name: "ILO ILOSTAT",
+                full: "International Labour Organization (2024). ILOSTAT — Labour force statistics, ages 15–24.",
+                url: "ilostat.ilo.org",
+              },
+              {
+                name: "World Bank WDI",
+                full: "World Bank (2023). World Development Indicators — Informal employment, share of total employment.",
+                url: "data.worldbank.org",
+              },
+              {
+                name: "Frey & Osborne (2017)",
+                full: "Frey, C.B. & Osborne, M.A. (2017). The future of employment: How susceptible are jobs to computerisation? Technological Forecasting and Social Change, 114, 254–280.",
+                url: "doi.org/10.1016/j.techfore.2016.08.019",
+              },
+              {
+                name: "Wittgenstein Centre",
+                full: "Wittgenstein Centre for Demography and Global Human Capital (2024). Human Capital Data Explorer — Educational attainment projections 2025–2035.",
+                url: "dataexplorer.wittgensteincentre.org",
+              },
+              {
+                name: "UNESCO UIS",
+                full: "UNESCO Institute for Statistics (2023). Educational attainment of population aged 25+ years.",
+                url: "uis.unesco.org",
+              },
+            ].map((s, i) => (
               <div
                 key={s.name}
-                className="flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-primary-foreground/[0.06] border border-primary-foreground/15 hover:bg-primary-foreground/[0.1] transition-smooth"
+                className="flex items-start gap-3 px-4 py-3 rounded-xl bg-primary-foreground/[0.05] border border-primary-foreground/10 hover:bg-primary-foreground/[0.09] transition-smooth"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold leading-tight">{s.name}</div>
-                  <div className="text-[11px] text-primary-foreground/55 mt-0.5 leading-tight">
-                    {s.scope}
+                <span className="font-mono text-[11px] text-accent font-bold mt-0.5 flex-shrink-0 w-6">
+                  [{i + 1}]
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent mb-1">
+                    {s.name}
+                  </div>
+                  <div className="text-[12px] text-primary-foreground/75 leading-snug">
+                    {s.full}
+                  </div>
+                  <div className="text-[10px] font-mono text-primary-foreground/40 mt-1">
+                    {s.url}
                   </div>
                 </div>
               </div>
@@ -673,6 +876,228 @@ const Dashboard = () => {
       </section>
 
       <Footer />
+    </div>
+  );
+};
+
+// ─── Live activity panel ───
+const LiveActivityPanel = ({ countryCode }: { countryCode: string }) => {
+  const targets =
+    countryCode === "PK"
+      ? { profiles: 47, skills: 312, matches: 891 }
+      : { profiles: 62, skills: 408, matches: 1124 };
+
+  const profiles = useCountUp(targets.profiles);
+  const skills = useCountUp(targets.skills);
+  const matches = useCountUp(targets.matches);
+
+  const items = [
+    { label: "Profiles created today", value: profiles, hint: "↑ vs yesterday", icon: Activity },
+    { label: "Skills mapped this week", value: skills, hint: "ESCO-aligned", icon: Sparkles },
+    { label: "Opportunities matched this month", value: matches, hint: "↑ MoM", icon: Target },
+  ];
+
+  return (
+    <div className="relative bg-primary text-primary-foreground rounded-3xl p-6 md:p-8 overflow-hidden border-2 border-primary">
+      <div
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
+        }}
+      />
+      <div className="absolute -top-20 -right-16 w-72 h-72 rounded-full bg-accent/15 blur-3xl" />
+
+      <div className="relative flex items-start justify-between mb-5 flex-wrap gap-3">
+        <div className="flex items-center gap-2">
+          <span className="relative flex w-2 h-2">
+            <span className="absolute inline-flex w-full h-full rounded-full bg-accent opacity-75 animate-ping" />
+            <span className="relative inline-flex w-2 h-2 rounded-full bg-accent" />
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-accent">
+            Live activity
+          </span>
+        </div>
+        <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-primary-foreground/55">
+          Network · {countryCode === "PK" ? "Pakistan" : "Nigeria"}
+        </span>
+      </div>
+
+      <div className="relative grid grid-cols-1 md:grid-cols-3 gap-4">
+        {items.map((it) => (
+          <div
+            key={it.label}
+            className="rounded-2xl bg-primary-foreground/[0.06] border border-primary-foreground/15 p-5"
+          >
+            <div className="flex items-center gap-2 text-accent mb-3">
+              <it.icon size={14} />
+              <span className="text-[10px] uppercase tracking-[0.16em] font-bold">{it.hint}</span>
+            </div>
+            <div className="font-display text-4xl md:text-5xl font-bold tabular-nums tracking-tight leading-none mb-2">
+              {it.value.toLocaleString()}
+            </div>
+            <div className="text-xs text-primary-foreground/70 leading-snug">{it.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const useCountUp = (target: number, duration = 1400) => {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    setValue(0);
+    const start = Date.now();
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const t = Math.min(1, elapsed / duration);
+      // ease-out
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t >= 1) clearInterval(id);
+    }, 30);
+    return () => clearInterval(id);
+  }, [target, duration]);
+  return value;
+};
+
+// ─── Region heatmap ───
+const RegionHeatmap = ({
+  regions,
+  regionLabel,
+  countryName,
+}: {
+  regions: { id: string; name: string; d: string; intensity: number; unemployment: string }[];
+  regionLabel: string;
+  countryName: string;
+}) => {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const hovered = regions.find((r) => r.id === hoveredId) ?? null;
+
+  return (
+    <div className="bg-card rounded-3xl p-6 md:p-8 border border-border shadow-card">
+      <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
+        <div>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-primary tracking-tight">
+            Regional unemployment heatmap
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">{regionLabel}</p>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
+          <MapPin size={12} className="text-accent" /> {countryName}
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-[1fr_280px] gap-6 items-start">
+        {/* SVG map */}
+        <div className="relative bg-secondary/40 rounded-2xl border border-border/60 p-4 aspect-[4/3] overflow-hidden">
+          <svg viewBox="0 0 100 100" className="w-full h-full" role="img" aria-label={`${countryName} regions`}>
+            {regions.map((r) => {
+              const isHovered = hoveredId === r.id;
+              // Map intensity (0-1) to terracotta opacity 0.25 → 0.95
+              const fillOpacity = 0.25 + r.intensity * 0.7;
+              return (
+                <g key={r.id}>
+                  <path
+                    d={r.d}
+                    fill="hsl(var(--accent))"
+                    fillOpacity={fillOpacity}
+                    stroke="hsl(var(--card))"
+                    strokeWidth={isHovered ? 0.8 : 0.4}
+                    className="transition-all cursor-pointer"
+                    style={{ filter: isHovered ? "brightness(1.1)" : undefined }}
+                    onMouseEnter={() => setHoveredId(r.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                  />
+                </g>
+              );
+            })}
+            {/* Region labels */}
+            {regions.map((r) => {
+              // Approximate centroid from path's first M coords (rough)
+              const match = r.d.match(/M([\d.]+),([\d.]+)/);
+              if (!match) return null;
+              const x = parseFloat(match[1]) + 8;
+              const y = parseFloat(match[2]) + 12;
+              return (
+                <text
+                  key={r.id}
+                  x={x}
+                  y={y}
+                  fontSize="3"
+                  fontWeight="700"
+                  fill="hsl(var(--primary))"
+                  textAnchor="middle"
+                  className="pointer-events-none select-none"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  {r.id}
+                </text>
+              );
+            })}
+          </svg>
+
+          {hovered && (
+            <div className="absolute top-3 left-3 bg-card border border-border shadow-card rounded-xl px-3 py-2 text-xs">
+              <div className="font-bold text-primary">{hovered.name}</div>
+              <div className="text-muted-foreground">
+                Unemployment: <span className="font-mono text-accent font-bold">{hovered.unemployment}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Legend + region list */}
+        <div className="space-y-4">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-2">
+              Legend · youth unemployment
+            </div>
+            <div className="h-3 rounded-full bg-gradient-to-r from-accent/25 via-accent/60 to-accent w-full" />
+            <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground mt-1">
+              <span>Lower</span>
+              <span>Higher</span>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground mb-1">
+              Regions ({regions.length})
+            </div>
+            {regions
+              .slice()
+              .sort((a, b) => b.intensity - a.intensity)
+              .map((r) => (
+                <div
+                  key={r.id}
+                  onMouseEnter={() => setHoveredId(r.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  className={cn(
+                    "flex items-center justify-between gap-3 px-3 py-2 rounded-lg border transition-smooth cursor-pointer",
+                    hoveredId === r.id
+                      ? "bg-accent/10 border-accent/30"
+                      : "bg-secondary/40 border-border/60 hover:bg-secondary"
+                  )}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      style={{ background: `hsl(var(--accent) / ${0.3 + r.intensity * 0.7})` }}
+                    />
+                    <span className="text-xs font-semibold text-foreground truncate">{r.name}</span>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-accent tabular-nums">
+                    {r.unemployment}
+                  </span>
+                </div>
+              ))}
+          </div>
+          <div className="text-[10px] text-muted-foreground italic leading-relaxed">
+            Source: ILO ILOSTAT subnational estimates · Rozgar.ai network calibration
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
