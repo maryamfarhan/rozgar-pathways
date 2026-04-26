@@ -352,9 +352,22 @@ const Dashboard = () => {
                 Employer demand vs youth supply, indexed 0–100
               </p>
             </div>
-            <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
-              Source: ILO + Rozgar.ai network
-            </span>
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="text-right">
+                <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-muted-foreground">
+                  Last updated
+                </div>
+                <div className="text-xs font-mono text-foreground/80">{lastUpdated}</div>
+              </div>
+              <Button
+                onClick={exportCSV}
+                size="sm"
+                variant="outline"
+                className="h-8 rounded-full px-3 text-xs font-semibold border-primary/20 hover:bg-secondary"
+              >
+                <FileSpreadsheet size={13} className="mr-1.5" /> Export CSV
+              </Button>
+            </div>
           </div>
 
           <div className="overflow-x-auto -mx-2">
