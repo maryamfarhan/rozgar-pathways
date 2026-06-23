@@ -111,13 +111,13 @@ const About = () => {
           <div className="relative text-center max-w-xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/30 text-accent text-[10px] uppercase tracking-[0.2em] font-bold mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              Built for
+              Built by
             </div>
             <h3 className="font-display text-3xl md:text-4xl font-bold mb-2 tracking-tight leading-[1.1]">
-              MIT Global Hackathon
+              The youth, for the youth.
             </h3>
             <p className="text-primary-foreground/75 mb-7 text-base">
-              World Bank UNMAPPED Challenge
+              We grew up watching skills go unseen. We built Rozgar.ai because we are the people this is for.
             </p>
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full font-semibold shadow-warm h-12 px-7">
               <a href="https://github.com/maryamfarhan/rozgar-pathways" target="_blank" rel="noreferrer">
