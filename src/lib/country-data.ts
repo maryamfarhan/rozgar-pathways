@@ -1,4 +1,4 @@
-export type CountryCode = "PK" | "NG";
+export type CountryCode = "PK" | "NG" | "BD" | "ET";
 
 export type GapLevel = "high" | "med" | "low";
 export type RiskLevel = "low" | "med" | "high";
