@@ -10,11 +10,14 @@ import { ArrowRight, Compass, Shield, Sparkles, Users, Building2, Globe2 } from 
 const Landing = () => {
   const { country } = useCountry();
 
-  // Bilingual labels shift based on country context (Urdu for PK, Hausa for NG)
-  const localLabels =
-    country.code === "PK"
-      ? { a: "ہنر", b: "حفاظت", c: "موقع", script: "urdu" as const }
-      : { a: "Sana'a", b: "Kāriya", c: "Dāmā", script: "latin" as const };
+  // Bilingual labels shift based on country context
+  const localLabelsMap: Record<string, { a: string; b: string; c: string; script: "urdu" | "latin" }> = {
+    PK: { a: "ہنر", b: "حفاظت", c: "موقع", script: "urdu" },
+    NG: { a: "Sana'a", b: "Kāriya", c: "Dāmā", script: "latin" },
+    BD: { a: "Dakkhata", b: "Nirapatta", c: "Shujog", script: "latin" },
+    ET: { a: "Chilot'a", b: "Tibeka", c: "Idil", script: "latin" },
+  };
+  const localLabels = localLabelsMap[country.code] ?? localLabelsMap.NG;
 
   const pillars = [
     {
