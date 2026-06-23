@@ -46,7 +46,12 @@ const Youth = () => {
   const toggleLang = (l: string) =>
     setLangs((prev) => (prev.includes(l) ? prev.filter((x) => x !== l) : [...prev, l]));
 
-  const isPK = country.code === "PK";
+  const demo = {
+    PK: { city: "Karachi", location: "Karachi, Pakistan" },
+    NG: { city: "Lagos", location: "Lagos, Nigeria" },
+    BD: { city: "Dhaka", location: "Dhaka, Bangladesh" },
+    ET: { city: "Addis Ababa", location: "Addis Ababa, Ethiopia" },
+  }[country.code] ?? { city: "Lagos", location: "Lagos, Nigeria" };
 
   // Demo data for Zara — content creator from Karachi
   const profile = {
