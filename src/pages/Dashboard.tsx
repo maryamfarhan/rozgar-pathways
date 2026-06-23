@@ -944,7 +944,7 @@ const LiveActivityPanel = ({ countryCode }: { countryCode: string }) => {
           </span>
         </div>
         <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-primary-foreground/55">
-          Network · {countryCode === "PK" ? "Pakistan" : "Nigeria"}
+          Network · {COUNTRY_NAMES[countryCode] ?? countryCode}
         </span>
       </div>
 
