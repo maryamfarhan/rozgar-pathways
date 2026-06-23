@@ -394,7 +394,7 @@ const Landing = () => {
 
         {/* Inclusivity note */}
         <p className="text-center text-xs text-muted-foreground mt-10 italic">
-          Labels shown in {country.code === "PK" ? "Urdu (اردو)" : "Hausa"} — Rozgar.ai adapts to local language and context wherever it's deployed.
+          Labels shown in {country.code === "PK" ? "Urdu (اردو)" : country.code === "BD" ? "Bengali (বাংলা)" : country.code === "ET" ? "Amharic" : "Hausa"} — Rozgar.ai adapts to local language and context wherever it's deployed.
         </p>
       </section>
 
