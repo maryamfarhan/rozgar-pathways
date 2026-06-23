@@ -1,6 +1,6 @@
 # Rozgar.ai — روزگار
 ### Making skills visible. Making opportunity real.
-**MIT Global Hackathon — World Bank UNMAPPED Challenge**
+
 
 🌐 **Live App:** [rozgar-ai.lovable.app](https://rozgar-ai.lovable.app)
 💻 **Repo:** [github.com/maryamfarhan/rozgar-pathways](https://github.com/maryamfarhan/rozgar-pathways)
@@ -197,8 +197,6 @@ python main.py --country PK
 ---
 
 ## Built By
-
-Built for the MIT Global Hackathon 2025 — World Bank UNMAPPED Challenge.
 
 *We built Rozgar.ai because we are the people this is for.*
 
