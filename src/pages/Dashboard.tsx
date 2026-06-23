@@ -44,6 +44,34 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+const UNEMPLOYMENT_DELTA: Record<string, string> = {
+  PK: "+0.4 pts YoY",
+  NG: "+1.2 pts YoY",
+  BD: "+0.6 pts YoY",
+  ET: "+1.5 pts YoY",
+};
+
+const SECONDARY_DELTA: Record<string, string> = {
+  PK: "+1.8 pts YoY",
+  NG: "+1.4 pts YoY",
+  BD: "+2.0 pts YoY",
+  ET: "+1.6 pts YoY",
+};
+
+const LIVE_TARGETS: Record<string, { profiles: number; skills: number; matches: number }> = {
+  PK: { profiles: 47, skills: 312, matches: 891 },
+  NG: { profiles: 62, skills: 408, matches: 1124 },
+  BD: { profiles: 38, skills: 285, matches: 720 },
+  ET: { profiles: 28, skills: 195, matches: 540 },
+};
+
+const COUNTRY_NAMES: Record<string, string> = {
+  PK: "Pakistan",
+  NG: "Nigeria",
+  BD: "Bangladesh",
+  ET: "Ethiopia",
+};
+
 const Dashboard = () => {
   const { country } = useCountry();
   const { user, signOut } = useAuth();
