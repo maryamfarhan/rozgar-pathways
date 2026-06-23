@@ -910,10 +910,7 @@ const Dashboard = () => {
 
 // ─── Live activity panel ───
 const LiveActivityPanel = ({ countryCode }: { countryCode: string }) => {
-  const targets =
-    countryCode === "PK"
-      ? { profiles: 47, skills: 312, matches: 891 }
-      : { profiles: 62, skills: 408, matches: 1124 };
+  const targets = LIVE_TARGETS[countryCode] ?? LIVE_TARGETS.NG;
 
   const profiles = useCountUp(targets.profiles);
   const skills = useCountUp(targets.skills);
