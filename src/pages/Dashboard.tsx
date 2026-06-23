@@ -141,7 +141,7 @@ const Dashboard = () => {
       icon: Users,
       tone: "accent",
       trend: "up",
-      trendDelta: country.code === "PK" ? "+0.4 pts YoY" : "+1.2 pts YoY",
+      trendDelta: UNEMPLOYMENT_DELTA[country.code] ?? "+1.0 pts YoY",
     },
     {
       label: "Informal economy share",
