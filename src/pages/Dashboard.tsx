@@ -163,7 +163,7 @@ const Dashboard = () => {
       icon: GraduationCap,
       tone: "soft",
       trend: "up",
-      trendDelta: country.code === "PK" ? "+1.8 pts YoY" : "+1.4 pts YoY",
+      trendDelta: SECONDARY_DELTA[country.code] ?? "+1.5 pts YoY",
     },
     {
       label: "Projected secondary by 2035",
