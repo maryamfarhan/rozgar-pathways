@@ -2,7 +2,7 @@
 ### Making skills visible. Making opportunity real.
 
 
-🌐 **Live App:** [rozgar-ai.lovable.app](https://rozgar-ai.lovable.app)
+🌐 **Live App:** [rozgar-ai.lovable.app](https://rozgar-pathways.vercel.app/)
 💻 **Repo:** [github.com/maryamfarhan/rozgar-pathways](https://github.com/maryamfarhan/rozgar-pathways)
 
 ---
@@ -188,7 +188,7 @@ python main.py --country PK
 
 ## Live Demo
 
-**App:** [rozgar-ai.lovable.app](https://rozgar-ai.lovable.app)
+**App:** [rozgar-ai.lovable.app](https://rozgar-pathways.vercel.app/)
 
 **Organization Portal demo login:**
 - Email: `demo@rozgar.ai`
