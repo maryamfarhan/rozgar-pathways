@@ -100,6 +100,24 @@ const NG_EDUCATION: EducationPoint[] = [
   { year: 2035, secondary: 58, tertiary: 18 },
 ];
 
+const BD_EDUCATION: EducationPoint[] = [
+  { year: 2025, secondary: 54, tertiary: 14 },
+  { year: 2027, secondary: 57, tertiary: 16 },
+  { year: 2029, secondary: 60, tertiary: 18 },
+  { year: 2031, secondary: 63, tertiary: 20 },
+  { year: 2033, secondary: 66, tertiary: 22 },
+  { year: 2035, secondary: 69, tertiary: 25 },
+];
+
+const ET_EDUCATION: EducationPoint[] = [
+  { year: 2025, secondary: 35, tertiary: 10 },
+  { year: 2027, secondary: 38, tertiary: 11 },
+  { year: 2029, secondary: 41, tertiary: 12 },
+  { year: 2031, secondary: 44, tertiary: 14 },
+  { year: 2033, secondary: 48, tertiary: 16 },
+  { year: 2035, secondary: 52, tertiary: 18 },
+];
+
 export const countries: Record<CountryCode, CountryData> = {
   PK: {
     code: "PK",
