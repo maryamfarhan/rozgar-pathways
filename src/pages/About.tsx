@@ -96,7 +96,7 @@ const About = () => {
           </div>
         </div>
 
-        {/* Hackathon credit */}
+        {/* Built by the youth, for the youth */}
         <div className="relative bg-gradient-hero rounded-3xl p-10 md:p-12 text-primary-foreground overflow-hidden shadow-warm">
           <div
             className="absolute inset-0 opacity-[0.08]"
