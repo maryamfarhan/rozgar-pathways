@@ -53,6 +53,8 @@ const Youth = () => {
     ET: { city: "Addis Ababa", location: "Addis Ababa, Ethiopia" },
   }[country.code] ?? { city: "Lagos", location: "Lagos, Nigeria" };
 
+  const isPK = country.code === "PK";
+
   // Demo data for Zara — content creator from Karachi
   const profile = {
     name: "Zara Ahmed",
