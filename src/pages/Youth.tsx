@@ -59,7 +59,7 @@ const Youth = () => {
   const profile = {
     name: "Zara Ahmed",
     age: 21,
-    location: isPK ? "Karachi, Pakistan" : "Lagos, Nigeria",
+    location: demo.location,
     skills: [
       { name: "Social Media Management", confidence: "High", esco: "Digital marketing specialist", risk: "low" },
       { name: "Video Editing (Mobile)", confidence: "High", esco: "Multimedia content creator", risk: "low" },
