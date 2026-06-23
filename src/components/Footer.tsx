@@ -5,7 +5,7 @@ export const Footer = () => (
     <div className="container max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
       <Logo />
       <p className="text-sm text-muted-foreground text-center md:text-right">
-        Built for the MIT Global Hackathon · World Bank UNMAPPED Challenge
+        By the youth, for the youth · Rozgar.ai
       </p>
     </div>
   </footer>
