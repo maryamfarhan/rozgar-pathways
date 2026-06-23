@@ -274,7 +274,7 @@ const Landing = () => {
       <section className="container max-w-6xl mx-auto px-4 md:px-6 py-20">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-block text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-4">
-            What it does · {country.code === "PK" ? "تین کام" : "Abubuwa Uku"}
+            What it does · {localLabelsMap[country.code]?.a ?? localLabelsMap.NG.a}
           </div>
           <h2 className="font-display text-4xl md:text-6xl font-bold text-primary mb-5 tracking-[-0.03em] leading-[1]">
             Three things,<br />done well.
