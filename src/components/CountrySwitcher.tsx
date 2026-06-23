@@ -12,6 +12,8 @@ export const CountrySwitcher = ({ className, variant = "default" }: Props) => {
   const options: { code: CountryCode; flag: string; name: string }[] = [
     { code: "PK", flag: "🇵🇰", name: "Pakistan" },
     { code: "NG", flag: "🇳🇬", name: "Nigeria" },
+    { code: "BD", flag: "🇧🇩", name: "Bangladesh" },
+    { code: "ET", flag: "🇪🇹", name: "Ethiopia" },
   ];
 
   if (variant === "prominent") {
